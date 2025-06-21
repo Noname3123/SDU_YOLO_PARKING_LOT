@@ -11,6 +11,25 @@ U zip-u je na Onedrive-u. Zip zadrži samo VisDrone/train folder (labeli su već
 
 [Link](https://uniri-my.sharepoint.com/:u:/g/personal/benjamin_jakupovic_uniri_hr1/EQBM7BfXOxNNgzyhu1hAooIBJNMTV6NSp90_9Dc4VGRJ2A?e=0zQf7x)
 
+# Struktura za editiranje slika
+Direktorij u kojem će se kreirati editirane slike za treniranje modela je organiziran ovako:
+
+```
+ImageEditor/
+    ---- ImageEditor.py
+
+VisDrone/
+    ---- train/
+            ---- images/
+                      ---- image_name.jpg
+
+            ---- labels/
+                      ---- image_name.txt
+
+            ---- annotations/
+                      ---- image_name.txt
+```
+
 # Struktura dataseta
 Direktorij s fileoveima nad kojim model uči i testira su organizirane ovako:
 
