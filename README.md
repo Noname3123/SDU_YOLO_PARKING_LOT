@@ -12,7 +12,7 @@ U zip-u je na Onedrive-u. Zip zadrži samo VisDrone/train folder (labeli su već
 [Link](https://uniri-my.sharepoint.com/:u:/g/personal/benjamin_jakupovic_uniri_hr1/EQBM7BfXOxNNgzyhu1hAooIBJNMTV6NSp90_9Dc4VGRJ2A?e=0zQf7x)
 
 # Download link za cijeli dataset (augmentiran + train + validation)
-[Link](https://uniri-my.sharepoint.com/:u:/g/personal/benjamin_jakupovic_uniri_hr1/EWGQQ5-CCXZOs-B2MoFNo68Bh8col_ZwImz1UxQPVOw7LQ?e=WCXard)
+[Link](https://uniri-my.sharepoint.com/:u:/g/personal/benjamin_jakupovic_uniri_hr1/EZvNWy7CBKxBmyLqJDVhZNUBqFrAyNVh8YlsqdFTABKR4A?e=af9uN9)
 
 # Struktura za editiranje slika
 Direktorij u kojem će se kreirati editirane slike za treniranje modela je organiziran ovako:
