@@ -58,7 +58,7 @@ def augment_dataset():
             print(f"Greška pri učitavanju {filename}")
             continue
 
-        used_augmentations = random.sample(AUGMENTATIONS, 5)
+        used_augmentations = random.sample(AUGMENTATIONS, 3)
 
         for aug_name in used_augmentations:
             aug_image = AUGMENT_FUNCTIONS[aug_name](image)
@@ -66,7 +66,8 @@ def augment_dataset():
             new_image_path = os.path.join(IMAGES_DIR, new_filename)
 
             # Spremanje nove slike
-            cv2.imencode('.jpg', aug_image)[1].tofile(new_image_path)
+            # Dodavanje kompresije: cv2.IMWRITE_JPEG_QUALITY, vrijednost 0-100 (niža vrijednost = veća kompresija)
+            cv2.imencode('.jpg', aug_image, [cv2.IMWRITE_JPEG_QUALITY, 50])[1].tofile(new_image_path)
 
             # Kopiranje label datoteke
             label_src = os.path.join(LABELS_DIR, f"{base_name}.txt")
