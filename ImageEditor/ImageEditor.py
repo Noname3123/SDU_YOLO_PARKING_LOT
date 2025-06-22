@@ -58,7 +58,7 @@ def augment_dataset():
             print(f"Greška pri učitavanju {filename}")
             continue
 
-        used_augmentations = random.sample(AUGMENTATIONS, 3)
+        used_augmentations = random.sample(AUGMENTATIONS, 2)
 
         for aug_name in used_augmentations:
             aug_image = AUGMENT_FUNCTIONS[aug_name](image)
