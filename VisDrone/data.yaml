@@ -9,9 +9,8 @@
 #     └── VisDrone  ← yaml & folders here
 
 train: ./train/images # train images (relative to 'path')  6471 images
-#TODO: add val and test path to here
-#val: VisDrone2019-DET-val/images # val images (relative to 'path')  548 images
-#test: VisDrone2019-DET-test-dev/images # test images (optional)  1610 images
+val: ./valid/images # val images (relative to 'path')  548 images
+test: ./test/images # test images (optional)  1610 images
 
 # Classes
 names:

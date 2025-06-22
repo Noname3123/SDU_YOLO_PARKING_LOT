@@ -1,3 +1,6 @@
 .venv/
 VisDrone/train/
+VisDrone/test/
+VisDrone/valid/
 *.zip
+*.jpg
