@@ -3,5 +3,7 @@ VisDrone/train/
 VisDrone/test/
 VisDrone/valid/
 *.zip
-*.jpg
+./*.jpg
 *.7z
+*.pt
+park*.jpg
