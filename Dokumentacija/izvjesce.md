@@ -97,23 +97,9 @@ F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i 
 
 #### Interpretacija matrica konfuzije
 
-Matrica konfuzije i normalizirana matrica konfuzije pružaju detaljan uvid u performanse klasifikacije modela za prvi trening. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
-
-**Matrica konfuzije:**
-
-![Matrica](runs/detect/train1/confusion_matrix.png)
+Normalizirana matrica konfuzije pruži detaljan uvid u performanse klasifikacije modela za prvi trening. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
 
-
-* **True "non-vehicle" (Stvarno "non-vehicle"):**
-    * Model je točno klasificirao 3383 objekta kao "non-vehicle" kada su oni stvarno bili "non-vehicle" (True Positives).
-    * Međutim, značajan broj (70246) stvarnih "non-vehicle" objekata je pogrešno klasificiran kao "background". To ukazuje na veliki broj lažno negativnih (False Negatives) za ovu klasu.
-* **True "vehicle" (Stvarno "vehicle"):**
-    * Model je uspješno klasificirao 64445 objekata kao "vehicle" kada su oni stvarno bili "vehicle" (True Positives).
-    * Relativno mali broj "vehicle" objekata (5242) je pogrešno klasificiran kao "background".
-* **True "background" (Stvarno "background"):**
-    * Veliki broj stvarnih "background" instanci (114896) je ispravno prepoznat kao "background".
-    * Manji broj "background" instanci (1457) je pogrešno klasificiran kao "non-vehicle". Ovo predstavlja lažne pozitive za "non-vehicle" klasu.
 
 **Normalizirana matrica konfuzije:**
 
@@ -196,23 +182,9 @@ F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i 
 
 #### Interpretacija matrica konfuzije
 
-Matrica konfuzije i normalizirana matrica konfuzije za drugi trening modela pružaju uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+Normalizirana matrica konfuzije za drugi trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
-**Matrica konfuzije:**
-![Matrica](runs/detect/train2/confusion_matrix.png)
 
-* **True "non-vehicle" (Stvarno "non-vehicle"):**
-    * Samo 1 objekt je točno klasificiran kao "non-vehicle" kada je stvarno bio "non-vehicle".
-    * Značajan broj (70281) stvarnih "non-vehicle" objekata je pogrešno klasificiran kao "background".
-    * 3347 stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "vehicle".
-* **True "vehicle" (Stvarno "vehicle"):**
-    * Model je uspješno klasificirao 64505 objekata kao "vehicle" kada su oni stvarno bili "vehicle".
-    * Relativno mali broj "vehicle" objekata (5179) je pogrešno klasificiran kao "background".
-    * 3 stvarna "vehicle" objekta su pogrešno klasificirana kao "non-vehicle".
-* **True "background" (Stvarno "background"):**
-    * Veliki broj stvarnih "background" instanci (113998) je ispravno prepoznat kao "background".
-    * Manji broj "background" instanci (2367) je pogrešno klasificiran kao "non-vehicle".
-    * 98 "background" instanci je pogrešno klasificirano kao "vehicle".
 
 **Normalizirana matrica konfuzije:**
 ![Normalizirana matrica](runs/detect/train2/confusion_matrix_normalized.png)
@@ -300,23 +272,8 @@ F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i 
 
 #### Interpretacija matrica konfuzije
 
-Matrica konfuzije i normalizirana matrica konfuzije za treći trening modela pružaju uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+Normalizirana matrica konfuzije za treći trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
-**Matrica konfuzije:**
-![Matrica](runs/detect/train3/confusion_matrix.png)
-
-* **True "non-vehicle" (Stvarno "non-vehicle"):**
-    * Samo 1 objekt je točno klasificiran kao "non-vehicle" kada je stvarno bio "non-vehicle".
-    * Značajan broj (70273) stvarnih "non-vehicle" objekata je pogrešno klasificiran kao "background".
-    * 3355 stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "vehicle".
-* **True "vehicle" (Stvarno "vehicle"):**
-    * Model je uspješno klasificirao 64118 objekata kao "vehicle" kada su oni stvarno bili "vehicle".
-    * Relativno mali broj "vehicle" objekata (5565) je pogrešno klasificiran kao "background".
-    * 4 stvarna "vehicle" objekta su pogrešno klasificirana kao "non-vehicle".
-* **True "background" (Stvarno "background"):**
-    * Veliki broj stvarnih "background" instanci (113953) je ispravno prepoznat kao "background".
-    * Manji broj "background" instanci (3450) je pogrešno klasificiran kao "non-vehicle".
-    * 107 "background" instanci je pogrešno klasificirano kao "vehicle".
 
 **Normalizirana matrica konfuzije:**
 ![Normalizirana matrica](runs/detect/train3/confusion_matrix_normalized.png)
@@ -405,23 +362,8 @@ F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i 
 
 #### Interpretacija matrica konfuzije
 
-Matrica konfuzije i normalizirana matrica konfuzije za četvrti trening modela pružaju uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+Normalizirana matrica konfuzije za četvrti trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
-**Matrica konfuzije:**
-![Matrica](runs/detect/train4/confusion_matrix.png)
-
-* **True "non-vehicle" (Stvarno "non-vehicle"):**
-    * Samo 2 objekta su točno klasificirana kao "non-vehicle" kada su stvarno bila "non-vehicle".
-    * Veliki broj (70257) stvarnih "non-vehicle" objekata je pogrešno klasificiran kao "background".
-    * 3372 stvarna "non-vehicle" objekta su pogrešno klasificirana kao "vehicle".
-* **True "vehicle" (Stvarno "vehicle"):**
-    * Model je uspješno klasificirao 64895 objekata kao "vehicle" kada su oni stvarno bili "vehicle".
-    * Relativno mali broj "vehicle" objekata (4790) je pogrešno klasificiran kao "background".
-    * 2205 stvarnih "vehicle" objekata je pogrešno klasificirano kao "non-vehicle".
-* **True "background" (Stvarno "background"):**
-    * Veliki broj stvarnih "background" instanci (117137) je ispravno prepoznat kao "background".
-    * Manji broj "background" instanci (2205) je pogrešno klasificiran kao "non-vehicle".
-    * 113953 "background" instanci je pogrešno klasificirano kao "vehicle".
 
 **Normalizirana matrica konfuzije:**
 ![Normalizirana matrica](runs/detect/train4/confusion_matrix_normalized.png)
@@ -509,23 +451,9 @@ F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i 
 
 #### Interpretacija matrica konfuzije
 
-Matrica konfuzije i normalizirana matrica konfuzije za peti trening modela pružaju uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+Normalizirana matrica konfuzije za peti trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
-**Matrica konfuzije:**
-![Matrica](runs/detect/train5/confusion_matrix.png)
 
-* **True "non-vehicle" (Stvarno "non-vehicle"):**
-    * Samo 1 objekt je točno klasificiran kao "non-vehicle" kada je stvarno bio "non-vehicle".
-    * Veliki broj (70263) stvarnih "non-vehicle" objekata je pogrešno klasificiran kao "background".
-    * 3365 stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "vehicle".
-* **True "vehicle" (Stvarno "vehicle"):**
-    * Model je uspješno klasificirao 64866 objekata kao "vehicle" kada su oni stvarno bili "vehicle".
-    * Relativno mali broj "vehicle" objekata (4820) je pogrešno klasificiran kao "background".
-    * 1 stvaran "vehicle" objekt je pogrešno klasificiran kao "non-vehicle".
-* **True "background" (Stvarno "background"):**
-    * Veliki broj stvarnih "background" instanci (113728) je ispravno prepoznat kao "background".
-    * Manji broj "background" instanci (1407) je pogrešno klasificiran kao "non-vehicle".
-    * 113728 "background" instanci je pogrešno klasificirano kao "vehicle".
 
 **Normalizirana matrica konfuzije:**
 ![Normalizirana matrica](runs/detect/train5/confusion_matrix_normalized.png)
@@ -616,23 +544,7 @@ F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i 
 
 #### Interpretacija matrica konfuzije
 
-Matrica konfuzije i normalizirana matrica konfuzije za šesti trening modela pružaju uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
-
-**Matrica konfuzije:**
-![Matrica](runs/detect/train6/confusion_matrix.png)
-
-* **True "non-vehicle" (Stvarno "non-vehicle"):**
-    * Samo 1 objekt je točno klasificiran kao "non-vehicle" kada je stvarno bio "non-vehicle".
-    * Veliki broj (70275) stvarnih "non-vehicle" objekata je pogrešno klasificiran kao "background".
-    * 3353 stvarna "non-vehicle" objekta su pogrešno klasificirana kao "vehicle".
-* **True "vehicle" (Stvarno "vehicle"):**
-    * Model je uspješno klasificirao 64796 objekata kao "vehicle" kada su oni stvarno bili "vehicle".
-    * Relativno mali broj "vehicle" objekata (4889) je pogrešno klasificiran kao "background".
-    * 1 stvaran "vehicle" objekt je pogrešno klasificiran kao "non-vehicle".
-* **True "background" (Stvarno "background"):**
-    * Veliki broj stvarnih "background" instanci (114175) je ispravno prepoznat kao "background".
-    * Manji broj "background" instanci (2108) je pogrešno klasificiran kao "non-vehicle".
-    * 245 "background" instanci je pogrešno klasificirano kao "vehicle".
+normalizirana matrica konfuzije za šesti trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
 **Normalizirana matrica konfuzije:**
 ![Normalizirana matrica](runs/detect/train6/confusion_matrix_normalized.png)
