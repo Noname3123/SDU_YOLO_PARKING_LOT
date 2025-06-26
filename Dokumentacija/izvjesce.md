@@ -51,22 +51,22 @@ Model je treniran s specifičnim skupom parametara definiranim u `args.yaml` dat
 Rezultati treniranja, zabilježeni u `results.csv`, pružaju uvid u proces učenja modela kroz 5 epoha.
 
 ##### Funkcije gubitka (Loss Functions)
-![Grafovi funkcija gubitka](runs/detect/train1/results.png)
+![Grafovi funkcija gubitka](runs_Jakupović/detect/train1/results.png)
 
 Funkcije gubitka (`box_loss`, `cls_loss`, `dfl_loss`) pokazuju koliko model "griješi" prilikom predviđanja. Niža vrijednost označava bolje performanse.
 - **Gubitak na trening skupu**: Vrijednosti `train/box_loss`, `train/cls_loss` i `train/dfl_loss` konzistentno opadaju tijekom epoha (npr. `train/box_loss` pada s 1.68 na 1.40). To je pozitivan znak koji pokazuje da model uspješno uči iz podataka na kojima se trenira.
 - **Gubitak na validacijskom skupu**: Vrijednosti `val/box_loss`, `val/cls_loss` i `val/dfl_loss` su znatno veće od trening vrijednosti i ne pokazuju jasan trend opadanja. Primjerice, `val/box_loss` ostaje oko vrijednosti 3.0. Visoka vrijednost `val/cls_loss` (gubitak klasifikacije, ~3.8) posebno sugerira da se model muči s ispravnom klasifikacijom objekata na podacima koje prije nije vidio. Ova velika razlika između trening i validacijskog gubitka jasan je pokazatelj prekomjernog prilagođavanja (overfitting), gdje model "pamti" trening podatke umjesto da uči generalizirane značajke.
 
 ##### Preciznost (Precision)
-![Graf preciznosti](runs/detect/train1/results.png)
+![Graf preciznosti](runs_Jakupović/detect/train1/results.png)
 Preciznost mjeri udio točnih pozitivnih detekcija među svim detekcijama koje je model napravio. Na primjer, ako model detektira 10 automobila, a 8 od njih su stvarno automobili, preciznost je 80%. U zadnjoj, petoj epohi, metrika `metrics/precision(B)` pokazuje značajan skok na `0.73785`. Iako ovo izgleda obećavajuće, treba biti oprezan jer je u prethodnim epohama vrijednost bila znatno niža (oko 0.21-0.25). Ovakav nagli skok može biti posljedica rasporeda učenja (learning rate schedule) i ne mora nužno predstavljati stabilno poboljšanje performansi.
 
 ##### Odziv (Recall)
-![Graf odziva](runs/detect/train1/results.png)
+![Graf odziva](runs_Jakupović/detect/train1/results.png)
 Odziv mjeri koliko je model uspješan u pronalaženju svih relevantnih objekata na slici. Ako na slici ima 10 automobila, a model ih pronađe 7, odziv je 70%. Metrika `metrics/recall(B)` pokazuje blagi, ali stabilan rast s `0.348` na `0.400` kroz 5 epoha. To znači da model postupno postaje bolji u pronalaženju svih postojećih objekata, iako još uvijek propušta više od polovice (oko 60%).
 
 ##### Srednja prosječna preciznost (mAP)
-![Graf mAP metrika](runs/detect/train1/results.png)
+![Graf mAP metrika](runs_Jakupović/detect/train1/results.png)
 mAP (mean Average Precision) je ključna metrika za zadatke detekcije objekata jer kombinira preciznost i odziv u jednu vrijednost, čineći je najvažnijim pokazateljem ukupnih performansi modela.
 - **`metrics/mAP50(B)`**: Ova metrika mjeri performanse pri pragu preklapanja (IoU - Intersection over Union) od 50%. Vrijednosti se kreću oko `0.24`, što ukazuje na osnovnu sposobnost detekcije. Model može locirati objekte, ali ne s visokom preciznošću.
 - **`metrics/mAP50-95(B)`**: Ovo je stroža i standardna metrika koja usrednjava mAP preko različitih IoU pragova (od 50% do 95% u koracima od 5%). Rezultati su ovdje znatno niži (oko `0.07-0.08`). To potvrđuje da, iako model može grubo detektirati objekte (što pokazuje `mAP50`), pozicije i veličine predviđenih okvira (bounding boxes) nisu dovoljno precizne da bi zadovoljile više pragove preklapanja.
@@ -77,19 +77,19 @@ Na grafu Precision-Confidence, plava linija koja predstavlja "all classes" pokaz
 
 #### Precision-Recall Curve
 
-![PrecisionRecallCurve](runs/detect/train1/PR_curve.png)
+![PrecisionRecallCurve](runs_Jakupović/detect/train1/PR_curve.png)
 
 Graf Precision-Recall prikazuje odnos između preciznosti (Precision) i odziva (Recall). Idealna krivulja bila bi blizu gornjeg desnog kuta, što znači visoku preciznost i visok odziv. Plava linija ("all classes") pokazuje da model postiže relativno nisku preciznost (oko 0.3) čak i pri visokom odzivu, koja se zatim blago smanjuje kako odziv raste. Narančasta linija ("vehicle") ima znatno bolje performanse, s preciznošću koja počinje oko 0.6 i postupno pada kako odziv raste. Linija za "non-vehicle" klasu ostaje na nuli. Vrijednost mAP@0.5 za "all classes" iznosi 0.250, što je niska vrijednost i ukazuje na općenito loše performanse detekcije objekata za sve klase pri pragu IoU od 0.5. Vrijednost mAP@0.5 za klasu "vehicle" iznosi 0.500, što je bolji, ali još uvijek umjeren rezultat. Klasa "non-vehicle" ima mAP@0.5 od 0.000, što potvrđuje da model ne detektira tu klasu.
 
 #### Recall-Confidence Curve
 
-![RecallConfidenceCurve](runs/detect/train1/R_curve.png)
+![RecallConfidenceCurve](runs_Jakupović/detect/train1/R_curve.png)
 
 Na grafu Recall-Confidence, plava linija ("all classes") prikazuje kako se odziv (Recall) mijenja s pragom pouzdanosti (Confidence). Odziv počinje visok i postupno opada kako prag pouzdanosti raste. To je očekivano, jer povećanje pouzdanosti znači da model postaje selektivniji i propušta više detekcija. Narančasta linija ("vehicle") pokazuje znatno veći odziv u odnosu na "all classes", zadržavajući visoku razinu do praga pouzdanosti od oko 0.8, nakon čega naglo pada. Linija za "non-vehicle" klasu ponovno ostaje na gotovo nuli. Legenda pokazuje da je odziv za "all classes" 0.44 pri pragu pouzdanosti od 0.000, što je točka gdje je model najmanje selektivan i pokušava pronaći što više objekata.
 
 #### F1-Confidence Curve
 
-![F1Confidence](runs/detect/train1/F1_curve.png)
+![F1Confidence](runs_Jakupović/detect/train1/F1_curve.png)
 
 
 
@@ -103,7 +103,7 @@ Normalizirana matrica konfuzije pruži detaljan uvid u performanse klasifikacije
 
 **Normalizirana matrica konfuzije:**
 
-![Normalizirana matrica](runs/detect/train1/confusion_matrix_normalized.png)
+![Normalizirana matrica](runs_Jakupović/detect/train1/confusion_matrix_normalized.png)
 
 Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
 * **"non-vehicle" klasa:**
@@ -133,47 +133,47 @@ U drugoj iteraciji, parametri su prilagođeni s ciljem poboljšanja performansi.
 Rezultati iz `results.csv` pokazuju slične trendove kao i u prvom treniranju, unatoč promjeni rezolucije slike.
 
 ##### Funkcije gubitka (Loss Functions)
-![Grafovi funkcija gubitka](runs/detect/train2/results.png)
+![Grafovi funkcija gubitka](runs_Jakupović/detect/train2/results.png)
 - **Gubitak na trening skupu**: Sve tri komponente gubitka (`train/box_loss`, `train/cls_loss`, `train/dfl_loss`) pokazuju konzistentan pad tijekom 4 epohe. Na primjer, `train/box_loss` pada s 1.48 na 1.32. Ovo potvrđuje da model i dalje uči iz trening podataka.
 - **Gubitak na validacijskom skupu**: Kao i u prethodnom pokušaju, vrijednosti gubitka na validacijskom skupu (`val/box_loss` ~2.9, `val/cls_loss` ~4.2) su vrlo visoke i ne pokazuju trend opadanja. Veliki jaz između trening i validacijskog gubitka i dalje je prisutan, što je snažan pokazatelj prekomjernog prilagođavanja (overfitting).
 
 ##### Preciznost (Precision)
-![Graf preciznosti](runs/detect/train2/results.png)
+![Graf preciznosti](runs_Jakupović/detect/train2/results.png)
 Metrika `metrics/precision(B)` ostaje niska i stagnira oko vrijednosti `0.22` tijekom cijelog treniranja. To znači da je od svih detekcija koje model napravi, samo oko 22% njih ispravno. Povećanje rezolucije slike nije donijelo poboljšanje u ovom segmentu.
 
 ##### Odziv (Recall)
-![Graf odziva](runs/detect/train1/results.png)
+![Graf odziva](runs_Jakupović/detect/train1/results.png)
 Metrika `metrics/recall(B)` pokazuje blagu nestabilnost, krećući se oko vrijednosti `0.40`. To znači da model uspijeva pronaći otprilike 40% svih stvarnih objekata na slikama. Iako je to malo bolje nego u prvom treniranju, model i dalje propušta većinu objekata.
 
 ##### Srednja prosječna preciznost (mAP)
-![Graf mAP metrika](runs/detect/train2/results.png)
+![Graf mAP metrika](runs_Jakupović/detect/train2/results.png)
 - **`metrics/mAP50(B)`**: Vrijednost ove metrike doseže vrhunac od `0.238` u drugoj epohi, nakon čega pada i stagnira. Ovo sugerira da model ima vrlo ograničenu sposobnost ispravnog lociranja objekata čak i pri nižem pragu preklapanja (IoU=50%).
 - **`metrics/mAP50-95(B)`**: Ključna metrika performansi, `mAP50-95(B)`, također doseže svoj maksimum u drugoj epohi s vrijednošću od `0.0756`, nakon čega pada. Niska vrijednost (ispod 0.1) potvrđuje da model nije precizan u određivanju granica objekata (bounding box). Upravo je pad ove metrike u 3. i 4. epohi aktivirao mehanizam ranog zaustavljanja.
 
 #### Precision-Confidence Curve
 
-![PrecisionConfidenceCurve](runs/detect/train2/P_curve.png)
+![PrecisionConfidenceCurve](runs_Jakupović/detect/train2/P_curve.png)
 
 
 Na grafu Precision-Confidence, plava linija koja predstavlja "all classes" prikazuje kako se preciznost (Precision) mijenja s pragom pouzdanosti (Confidence). Preciznost raste s povećanjem praga pouzdanosti. Pri pragu pouzdanosti od približno 0.8, preciznost za "all classes" naglo raste, dostižući 1.00 pri pouzdanosti od 0.937. Narančasta linija, koja predstavlja klasu "vehicle", također pokazuje porast preciznosti s povećanjem pouzdanosti, dostižući visoke vrijednosti. Plava linija, koja predstavlja "non-vehicle" klasu, ostaje na gotovo nuli, što znači da model ima vrlo nisku preciznost za detekcije koje nisu vozila.
 
 #### Precision-Recall Curve
 
-![PrecisionRecallCurve](runs/detect/train2/PR_curve.png)
+![PrecisionRecallCurve](runs_Jakupović/detect/train2/PR_curve.png)
 
 
 Graf Precision-Recall prikazuje odnos između preciznosti (Precision) i odziva (Recall). Plava linija ("all classes") pokazuje relativno nisku preciznost (oko 0.25-0.3) koja se blago smanjuje kako odziv raste. Narančasta linija ("vehicle") ima znatno bolje performanse, s preciznošću koja počinje oko 0.58 i postupno pada kako odziv raste. Linija za "non-vehicle" klasu ostaje na nuli. Vrijednost mAP@0.5 za "all classes" iznosi 0.239, što je niska vrijednost i ukazuje na općenito loše performanse detekcije objekata pri pragu IoU od 0.5. Vrijednost mAP@0.5 za klasu "vehicle" iznosi 0.477, što je bolji, ali još uvijek umjeren rezultat. Klasa "non-vehicle" ima mAP@0.5 od 0.000, što potvrđuje da model ne detektira tu klasu.
 
 #### Recall-Confidence Curve
 
-![RecallConfidenceCurve](runs/detect/train2/R_curve.png)
+![RecallConfidenceCurve](runs_Jakupović/detect/train2/R_curve.png)
 
 
 Na grafu Recall-Confidence, plava linija ("all classes") prikazuje kako se odziv (Recall) mijenja s pragom pouzdanosti (Confidence). Odziv počinje visok i postupno opada kako prag pouzdanosti raste, što je očekivano jer povećanje pouzdanosti čini model selektivnijim. Narančasta linija ("vehicle") pokazuje znatno veći odziv u odnosu na "all classes", zadržavajući visoku razinu do praga pouzdanosti od oko 0.8, nakon čega naglo pada. Linija za "non-vehicle" klasu ponovno ostaje na gotovo nuli. Odziv za "all classes" je 0.44 pri pragu pouzdanosti od 0.000, što je točka gdje je model najmanje selektivan.
 
 #### F1-Confidence Curve
 
-![F1Confidence](runs/detect/train2/F1_curve.png)
+![F1Confidence](runs_Jakupović/detect/train2/F1_curve.png)
 
 
 
@@ -187,7 +187,7 @@ Normalizirana matrica konfuzije za drugi trening modela pruži uvid u performans
 
 
 **Normalizirana matrica konfuzije:**
-![Normalizirana matrica](runs/detect/train2/confusion_matrix_normalized.png)
+![Normalizirana matrica](runs_Jakupović/detect/train2/confusion_matrix_normalized.png)
 
 Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
 * **"non-vehicle" klasa:**
@@ -221,34 +221,34 @@ U trećoj iteraciji, cilj je bio provjeriti hoće li duže treniranje donijeti p
 Rezultati iz `results.csv` za treće treniranje pokazuju da duže treniranje nije riješilo temeljne probleme.
 
 ##### Funkcije gubitka (Loss Functions)
-![Grafovi funkcija gubitka](runs/detect/train3/results.png)
+![Grafovi funkcija gubitka](runs_Jakupović/detect/train3/results.png)
 - **Gubitak na trening skupu**: Kao i u prethodnim pokušajima, gubitak na trening skupu (`train/box_loss`, `train/cls_loss`, `train/dfl_loss`) konzistentno opada kroz 9 epoha. Vrijednost `train/box_loss` pada s 1.72 na 1.35, a `train/cls_loss` s 1.13 na 0.74, što pokazuje da model i dalje "uči" trening podatke.
 - **Gubitak na validacijskom skupu**: Jaz između trening i validacijskog gubitka ostaje izrazito velik. Vrijednosti `val/box_loss` (~3.0) i `val/cls_loss` (~3.8) su visoke i ne pokazuju nikakav trend poboljšanja. Ovo je još jedan jasan dokaz teškog prekomjernog prilagođavanja (overfitting).
 
 ##### Preciznost (Precision)
-![Graf preciznosti](runs/detect/train3/results.png)
+![Graf preciznosti](runs_Jakupović/detect/train3/results.png)
 Metrika `metrics/precision(B)` je izrazito nestabilna. U prvoj i trećoj epohi bilježi visoke vrijednosti (~0.75), dok u ostalim epohama pada na nisku razinu od ~0.24. Ovakve oscilacije ukazuju na nestabilnost u procesu učenja i da visoke vrijednosti nisu pouzdan pokazatelj stvarnih performansi.
 
 ##### Odziv (Recall)
-![Graf odziva](runs/detect/train3/results.png)
+![Graf odziva](runs_Jakupović/detect/train3/results.png)
 Metrika `metrics/recall(B)` stagnira na niskoj razini, krećući se između `0.36` i `0.39`. To znači da model, neovisno o trajanju treniranja, konstantno propušta pronaći više od 60% objekata na validacijskim slikama.
 
 ##### Srednja prosječna preciznost (mAP)
-![Graf mAP metrika](runs/detect/train3/results.png)
+![Graf mAP metrika](runs_Jakupović/detect/train3/results.png)
 - **`metrics/mAP50(B)`**: Vrijednost ove metrike doseže vrhunac od `0.242` u trećoj epohi, nakon čega stagnira i blago opada.
 - **`metrics/mAP50-95(B)`**: Najvažnija metrika, `mAP50-95(B)`, postiže svoj maksimum od `0.0787` u četvrtoj epohi. Nakon toga, vrijednost ne uspijeva premašiti taj rezultat, što je nakon pet epoha stagnacije (od 5. do 9.) aktiviralo mehanizam ranog zaustavljanja. Izuzetno niska vrijednost (ispod 0.1) potvrđuje da model nije u stanju precizno detektirati objekte.
 
 
 #### Precision-Confidence Curve
 
-![PrecisionConfidenceCurve](runs/detect/train3/P_curve.png)
+![PrecisionConfidenceCurve](runs_Jakupović/detect/train3/P_curve.png)
 
 
 Na grafu Precision-Confidence, plava linija koja predstavlja "all classes" prikazuje kako se preciznost (Precision) mijenja s pragom pouzdanosti (Confidence). Preciznost raste s povećanjem praga pouzdanosti. Pri pragu pouzdanosti od približno 0.75, preciznost za "all classes" naglo raste, dostižući 1.00 pri pouzdanosti od 0.946. Narančasta linija, koja predstavlja klasu "vehicle", također pokazuje porast preciznosti s povećanjem pouzdanosti, dostižući visoke vrijednosti. Plava linija, koja predstavlja "non-vehicle" klasu, ostaje na gotovo nuli, što znači da model ima vrlo nisku preciznost za detekcije koje nisu vozila.
 
 #### Precision-Recall Curve
 
-![PrecisionRecallCurve](runs/detect/train3/PR_curve.png)
+![PrecisionRecallCurve](runs_Jakupović/detect/train3/PR_curve.png)
 
 
 
@@ -256,7 +256,7 @@ Graf Precision-Recall prikazuje odnos između preciznosti (Precision) i odziva (
 
 #### Recall-Confidence Curve
 
-![RecallConfidenceCurve](runs/detect/train3/R_curve.png)
+![RecallConfidenceCurve](runs_Jakupović/detect/train3/R_curve.png)
 
 
 
@@ -265,7 +265,7 @@ Na grafu Recall-Confidence, plava linija ("all classes") prikazuje kako se odziv
 
 #### F1-Confidence Curve
 
-![F1Confidence](runs/detect/train3/F1_curve.png)
+![F1Confidence](runs_Jakupović/detect/train3/F1_curve.png)
 
 
 F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i odziva) u odnosu na prag pouzdanosti (Confidence). F1 rezultat za "all classes" (plava linija) dostiže svoj maksimum (oko 0.3) pri pragu pouzdanosti od približno 0.709. Nakon toga, F1 rezultat naglo opada. Narančasta linija ("vehicle") dostiže znatno viši F1 rezultat (oko 0.6) pri sličnom pragu pouzdanosti, što ukazuje na bolje balansirane performanse za tu klasu. Linija za "non-vehicle" klasu ostaje na nuli.
@@ -276,7 +276,7 @@ Normalizirana matrica konfuzije za treći trening modela pruži uvid u performan
 
 
 **Normalizirana matrica konfuzije:**
-![Normalizirana matrica](runs/detect/train3/confusion_matrix_normalized.png)
+![Normalizirana matrica](runs_Jakupović/detect/train3/confusion_matrix_normalized.png)
 
 Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
 * **"non-vehicle" klasa:**
@@ -310,27 +310,27 @@ Treći pokušaj treniranja, unatoč povećanom broju epoha, nije donio napredak.
 Rezultati iz `results.csv` potvrđuju prethodne nalaze i pokazuju da kombinacija veće rezolucije i dužeg treniranja bez rješavanja temeljnog problema overfittinga ne donosi poboljšanja.
 
 ##### Funkcije gubitka (Loss Functions)
-![Grafovi funkcija gubitka](runs/detect/train4/results.png)
+![Grafovi funkcija gubitka](runs_Jakupović/detect/train4/results.png)
 - **Gubitak na trening skupu**: Vrijednosti gubitka (`train/box_loss`, `train/cls_loss`) konzistentno opadaju tijekom 8 epoha, s `train/box_loss` koji pada s 1.53 na 1.26. Ovo još jednom potvrđuje da model uspješno uči na trening podacima.
 - **Gubitak na validacijskom skupu**: Jaz između trening i validacijskog gubitka ostaje ogroman. Vrijednosti `val/box_loss` (~2.9) i `val/cls_loss` (~4.2) su izrazito visoke i ne pokazuju trend opadanja, što je jasan znak da model ne generalizira dobro.
 
 ##### Preciznost (Precision)
-![Graf preciznosti](runs/detect/train4/results.png)
+![Graf preciznosti](runs_Jakupović/detect/train4/results.png)
 Preciznost (`metrics/precision(B)`) pokazuje veliku nestabilnost. U 3. epohi bilježi skok na `0.745`, što se poklapa s najboljim mAP rezultatom, ali u ostalim epohama ostaje na niskoj razini od ~0.22-0.24. Ovakve oscilacije potvrđuju da model nije stabilan i da visoke vrijednosti nisu pouzdane.
 
 ##### Odziv (Recall)
-![Graf odziva](runs/detect/train4/results.png)
+![Graf odziva](runs_Jakupović/detect/train4/results.png)
 Odziv (`metrics/recall(B)`) pokazuje blagi, ali nedovoljan rast, s početnih `0.37` na konačnih `0.42`. Model i dalje propušta pronaći gotovo 60% svih objekata na slikama.
 
 ##### Srednja prosječna preciznost (mAP)
-![Graf mAP metrika](runs/detect/train4/results.png)
+![Graf mAP metrika](runs_Jakupović/detect/train4/results.png)
 - **`metrics/mAP50(B)`**: Vrijednost ove metrike doseže vrhunac od `0.2578` u trećoj epohi, nakon čega stagnira i opada.
 - **`metrics/mAP50-95(B)`**: Ključna metrika performansi, `mAP50-95(B)`, također postiže svoj maksimum od `0.0838` u trećoj epohi. Nakon toga, vrijednost više ne dostiže taj nivo, što je na kraju i aktiviralo rano zaustavljanje. Ovako niska vrijednost (ispod 0.1) definitivno potvrđuje da model, unatoč svim pokušajima, nije u stanju precizno locirati objekte.
 
 
 #### Precision-Confidence Curve
 
-![PrecisionConfidenceCurve](runs/detect/train4/P_curve.png)
+![PrecisionConfidenceCurve](runs_Jakupović/detect/train4/P_curve.png)
 
 
 
@@ -338,7 +338,7 @@ Na grafu Precision-Confidence, plava linija koja predstavlja "all classes" prika
 
 #### Precision-Recall Curve
 
-![PrecisionRecallCurve](runs/detect/train4/PR_curve.png)
+![PrecisionRecallCurve](runs_Jakupović/detect/train4/PR_curve.png)
 
 
 
@@ -346,7 +346,7 @@ Graf Precision-Recall prikazuje odnos između preciznosti (Precision) i odziva (
 
 #### Recall-Confidence Curve
 
-![RecallConfidenceCurve](runs/detect/train4/R_curve.png)
+![RecallConfidenceCurve](runs_Jakupović/detect/train4/R_curve.png)
 
 
 
@@ -354,7 +354,7 @@ Na grafu Recall-Confidence, plava linija ("all classes") prikazuje kako se odziv
 
 #### F1-Confidence Curve
 
-![F1Confidence](runs/detect/train4/F1_curve.png)
+![F1Confidence](runs_Jakupović/detect/train4/F1_curve.png)
 
 
 
@@ -366,7 +366,7 @@ Normalizirana matrica konfuzije za četvrti trening modela pruži uvid u perform
 
 
 **Normalizirana matrica konfuzije:**
-![Normalizirana matrica](runs/detect/train4/confusion_matrix_normalized.png)
+![Normalizirana matrica](runs_Jakupović/detect/train4/confusion_matrix_normalized.png)
 
 Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
 * **"non-vehicle" klasa:**
@@ -400,26 +400,26 @@ Peta analizirana iteracija predstavljala je pokušaj da se provjeri može li zna
 Rezultati iz `results.csv` za 20 epoha treniranja pružaju konačnu potvrdu o ponašanju modela s postojećim skupom podataka.
 
 ##### Funkcije gubitka (Loss Functions)
-![Grafovi funkcija gubitka](runs/detect/train5/results.png)
+![Grafovi funkcija gubitka](runs_Jakupović/detect/train5/results.png)
 - **Gubitak na trening skupu**: Gubitak na trening skupu (`train/box_loss`, `train/cls_loss`) pokazuje neprekidan i konzistentan pad tijekom svih 20 epoha. Vrijednost `train/box_loss` pada s 1.67 na 1.22. Ovo pokazuje da je model, s više vremena, postajao sve bolji u "pamćenju" trening podataka.
 - **Gubitak na validacijskom skupu**: Jaz između trening i validacijskog gubitka postao je još izraženiji. Vrijednosti `val/box_loss` (~3.0) i `val/cls_loss` (~4.2) ostaju visoke i potpuno stagniraju tijekom cijelog procesa. Ovo je definitivan dokaz teškog overfittinga.
 
 ##### Preciznost (Precision)
-![Graf preciznosti](runs/detect/train5/results.png)
+![Graf preciznosti](runs_Jakupović/detect/train5/results.png)
 Preciznost (`metrics/precision(B)`) je, kao i u prethodnim pokušajima, bila nestabilna. Zabilježen je anomalan skok na `0.73` u 6. epohi, ali se nakon toga metrika vratila i ostala na niskoj razini od ~0.23.
 
 ##### Odziv (Recall)
-![Graf odziva](runs/detect/train5/results.png)
+![Graf odziva](runs_Jakupović/detect/train5/results.png)
 Odziv (`metrics/recall(B)`) pokazuje vrlo spor, ali kontinuiran rast, s početnih `0.36` do konačnih `0.42`. Iako postoji blago poboljšanje, model i nakon 20 epoha i dalje ne uspijeva pronaći više od polovice (58%) objekata.
 
 ##### Srednja prosječna preciznost (mAP)
-![Graf mAP metrika](runs/detect/train5/results.png)
+![Graf mAP metrika](runs_Jakupović/detect/train5/results.png)
 - **`metrics/mAP50(B)`**: Vrijednost ove metrike doseže svoj vrhunac od `0.24785` u 12. epohi. U preostalih 8 epoha treniranja, ova vrijednost nije nadmašena, već stagnira.
 - **`metrics/mAP50-95(B)`**: Ključna metrika, `mAP50-95(B)`, također doseže svoj maksimum od `0.0816` u 12. epohi. Činjenica da se u dodatnih 8 epoha treniranja (više od 6000 sekundi dodatnog procesiranja) performanse nisu poboljšale, jasan je pokazatelj da je model dosegnuo svoj maksimum.
 
 #### Precision-Confidence Curve
 
-![PrecisionConfidenceCurve](runs/detect/train5/P_curve.png)
+![PrecisionConfidenceCurve](runs_Jakupović/detect/train5/P_curve.png)
 
 
 
@@ -427,7 +427,7 @@ Na grafu Precision-Confidence, plava linija koja predstavlja "all classes" prika
 
 #### Precision-Recall Curve
 
-![PrecisionRecallCurve](runs/detect/train5/PR_curve.png)
+![PrecisionRecallCurve](runs_Jakupović/detect/train5/PR_curve.png)
 
 
 
@@ -435,14 +435,14 @@ Graf Precision-Recall prikazuje odnos između preciznosti (Precision) i odziva (
 
 #### Recall-Confidence Curve
 
-![RecallConfidenceCurve](runs/detect/train5/R_curve.png)
+![RecallConfidenceCurve](runs_Jakupović/detect/train5/R_curve.png)
 
 
 Na grafu Recall-Confidence, plava linija ("all classes") prikazuje kako se odziv (Recall) mijenja s pragom pouzdanosti (Confidence). Odziv počinje visok i postupno opada kako prag pouzdanosti raste, što je očekivano jer povećanje pouzdanosti čini model selektivnijim. Narančasta linija ("vehicle") pokazuje znatno veći odziv u odnosu na "all classes", zadržavajući visoku razinu do praga pouzdanosti od oko 0.8, nakon čega naglo pada. Linija za "non-vehicle" klasu ponovno ostaje na gotovo nuli. Odziv za "all classes" je 0.45 pri pragu pouzdanosti od 0.000, što je točka gdje je model najmanje selektivan.
 
 #### F1-Confidence Curve
 
-![F1Confidence](runs/detect/train5/F1_curve.png)
+![F1Confidence](runs_Jakupović/detect/train5/F1_curve.png)
 
 
 
@@ -456,7 +456,7 @@ Normalizirana matrica konfuzije za peti trening modela pruži uvid u performanse
 
 
 **Normalizirana matrica konfuzije:**
-![Normalizirana matrica](runs/detect/train5/confusion_matrix_normalized.png)
+![Normalizirana matrica](runs_Jakupović/detect/train5/confusion_matrix_normalized.png)
 
 Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
 * **"non-vehicle" klasa:**
@@ -491,26 +491,26 @@ Peto treniranje je također potvrdilo da duže treniranje ne rješava problem. M
 Rezultati iz `results.csv` za šesto treniranje, unatoč promjenama u rezoluciji i zagrijavanju, pokazuju vrlo slične trendove kao i prethodni pokušaji.
 
 ##### Funkcije gubitka (Loss Functions)
-![Grafovi funkcija gubitka](runs/detect/train6/results.png)
+![Grafovi funkcija gubitka](runs_Jakupović/detect/train6/results.png)
 - **Gubitak na trening skupu**: Sve komponente gubitka na trening skupu (`train/box_loss`, `train/cls_loss`, `train/dfl_loss`) pokazuju konzistentan pad tijekom svih 20 epoha. Na primjer, `train/box_loss` pada s 1.48 na 1.12, a `train/cls_loss` s 0.98 na 0.58. Ovo potvrđuje da model nastavlja učiti i prilagođavati se trening podacima.
 - **Gubitak na validacijskom skupu**: Kao i u svim prethodnim iteracijama, gubitak na validacijskom skupu (`val/box_loss` ~2.9-2.96, `val/cls_loss` ~4.09-4.49) ostaje izrazito visok i ne pokazuje jasan trend opadanja. Veliki jaz između trening i validacijskog gubitka i dalje je dominantan pokazatelj teškog prekomjernog prilagođavanja (overfittinga).
 
 ##### Preciznost (Precision)
-![Graf preciznosti](runs/detect/train6/results.png)
+![Graf preciznosti](runs_Jakupović/detect/train6/results.png)
 Metrika `metrics/precision(B)` ostaje niska i nestabilna, krećući se uglavnom oko `0.21` do `0.23`. Iako je u 4. epohi zabilježen blagi skok na `0.229`, to nije dovelo do značajnog i trajnog poboljšanja. Niska preciznost ukazuje na to da model ima mnogo lažno pozitivnih detekcija.
 
 ##### Odziv (Recall)
-![Graf odziva](runs/detect/train6/results.png)
+![Graf odziva](runs_Jakupović/detect/train6/results.png)
 Metrika `metrics/recall(B)` pokazuje blagi, ali postojan rast, s početnih `0.395` na konačnih `0.435`. Iako je to pozitivan trend, model i dalje propušta detektirati više od polovice (oko 56%) stvarnih objekata na validacijskim slikama.
 
 ##### Srednja prosječna preciznost (mAP)
-![Graf mAP metrika](runs/detect/train6/results.png)
+![Graf mAP metrika](runs_Jakupović/detect/train6/results.png)
 - **`metrics/mAP50(B)`**: Vrijednost ove metrike doseže svoj maksimum od `0.25731` u 15. epohi. Nakon toga, blago opada ili stagnira.
 - **`metrics/mAP50-95(B)`**: Ključna metrika performansi, `mAP50-95(B)`, postiže svoj maksimum od `0.08375` u posljednjoj, 20. epohi. Iako je ovo marginalno poboljšanje u odnosu na prethodne pokušaje (npr. 0.0816 u petom treniranju), vrijednost je i dalje izuzetno niska (daleko ispod 0.1). To potvrđuje da model nije u stanju precizno locirati objekte i generalizirati na neviđene podatke.
 
 #### Precision-Confidence Curve
 
-![PrecisionConfidenceCurve](runs/detect/train6/P_curve.png)
+![PrecisionConfidenceCurve](runs_Jakupović/detect/train6/P_curve.png)
 
 
 
@@ -518,7 +518,7 @@ Na grafu Precision-Confidence, plava linija koja predstavlja "all classes" prika
 
 #### Precision-Recall Curve
 
-![PrecisionRecallCurve](runs/detect/train6/PR_curve.png)
+![PrecisionRecallCurve](runs_Jakupović/detect/train6/PR_curve.png)
 
 
 
@@ -527,7 +527,7 @@ Graf Precision-Recall prikazuje odnos između preciznosti (Precision) i odziva (
 
 #### Recall-Confidence Curve
 
-![RecallConfidenceCurve](runs/detect/train6/R_curve.png)
+![RecallConfidenceCurve](runs_Jakupović/detect/train6/R_curve.png)
 
 
 
@@ -536,7 +536,7 @@ Na grafu Recall-Confidence, plava linija ("all classes") prikazuje kako se odziv
 
 #### F1-Confidence Curve
 
-![F1Confidence](runs/detect/train6/F1_curve.png)
+![F1Confidence](runs_Jakupović/detect/train6/F1_curve.png)
 
 
 
@@ -547,7 +547,7 @@ F1-Confidence krivulja prikazuje F1 rezultat (harmonijsku sredinu preciznosti i 
 normalizirana matrica konfuzije za šesti trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
 **Normalizirana matrica konfuzije:**
-![Normalizirana matrica](runs/detect/train6/confusion_matrix_normalized.png)
+![Normalizirana matrica](runs_Jakupović/detect/train6/confusion_matrix_normalized.png)
 
 Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
 * **"non-vehicle" klasa:**
@@ -568,6 +568,80 @@ Analiza matrica konfuzije za šesti trening modela konzistentno ponavlja problem
 
 #### Ukupna ocjena
 Šesto treniranje, unatoč povećanoj rezoluciji slike i dužem trajanju, nije uspjelo riješiti problem prekomjernog prilagođavanja i niske generalizacije. Model konzistentno pokazuje iste simptome: gubitak na trening skupu opada, dok gubitak na validacijskom skupu stagnira na visokoj razini. mAP vrijednosti ostaju izuzetno niske, što ukazuje na to da model ne može precizno detektirati objekte u novim okruženjima. Svi dosadašnji eksperimenti snažno sugeriraju da problem nije u finom podešavanju hiperparametara treniranja, već u temeljnim aspektima poput kvalitete i raznolikosti skupa podataka, te nedostatku robusnih tehnika augmentacije koje bi spriječile model da "pamti" trening podatke.
+
+### Prvo treniranje - Yolo11 medium
+#### Parametri treniranja
+Prvo treniranje ovog modela izvedeno je sa skupom parametara također definiranim u `args.yaml` datoteci, a ključni parametri korišteni pri treniranju su:
+- **`epochs: 5`**: Model je treniran kroz 5 epoha, gdje jedna epoha predstavlja jedan potpuni prolaz kroz cijelokupni skup podataka za treniranje. Ovaj broj epoha je premalen da bi se model dobro istrenirao, što ukazuje na to da je ovo bio testni trening kako bi se uvidjele performanse samog modela.
+- **`batch: 4`**: Batch predstavlja broj slika koji je model uzimao pri svakoj iteraciji treniranja, konkretno u ovom primjeru to je 4 slike po iteraciji. Manji veličine serija koriste se kada su resursi, poput GPU-u, ograničeni radi stabilnijeg treniranja, ali potencijalno dovode do nestabilnijih gradijenata tokom učenja.
+- **`imgsz: 416`**: Ovaj parametar smanjuje veličinu slika na 416x416 piksela, što je uobičajena rezolucija za YOLO modele, budući da nudi podjednaku kvalitetu pri detekciji i brzini obrade slika.
+- **`patience: 2`**: Model pri treniranju koristi mehanizam ranog zaustavljanja, što konkretno u ovom primjeru znači da će se model zaustaviti ukoliko se ključna metrika `metrics/mAP50-95(B)` ne poboljša kroz dvije uzastopne iteracije (epohe). U konkretnom primjeru tokom ovog treniranja, model je završio nakon 3. epohe, što znači da se rezultat u 2. i 3. epohi nije popravljao u odnosu na onaj najbolji u 1. epohi.
+
+#### Interpretacija metrika
+Svi rezultati treniranja zabilježeni su u `results.csv` i pružaju uvid u proces učenja ovog modela kroz 5 epoha.
+
+##### Funkcije gubitka (Loss Functions)
+![Grafovi funkcija gubitka](runs_Đekić/detect/train/results.png)
+
+- **Gubitak na trening skupu**: Vrijednosti funkcija `train/box_loss`, `train/cls_loss` i `train/dfl_loss` su u konstantnom padu kroz svaku sljedeću epohu (npr. funkcija `box_loss` između prve i zadnje epohe opada sa ~1.69 na 1.55) što ukazuje da model uspješno uči iz zadanog skupa podataka pri treniranju.
+- **Gubitak na validacijskom skupu**: Greške na validacijskom skupu su znatno veće. Funkcije `val/box_loss` i `val/cls_loss` imaju povećanje greške između prve dvije epohe, dok u trećoj vrijednost greške neznatno opada. S druge strane, funkcija `val/dfl_loss` ima pad u vrijednosti greške između prve dvije epohe, a nakon toga vrijednost greške raste. Ovakve vrijednosti jasan su ukazatelj da model ima problema kod predviđanja nad skupom podataka koji još nije vidio. Razlog tomu je što se model prekomjerno prilagodio podacima za treniranje te zbog toga ne uspjeva naučiti generalizirane značajke. Takav termin se kod strojnog učenja naziva "overfitting".
+
+##### Preciznost (Precision)
+![Graf preciznosti](runs_Đekić/detect/train/results.png)
+Preciznost prema priloženom grafu konstantno blago opada, što je i očekivano ponašanje modela, budući da su greške bile sve veće. Aproksimirana preciznost kroz 3 epohe iznosila je oko 24% (u prvoj epohi model je imao preciznost oko 25%, a u drugoj oko 23%).
+
+##### Odziv (Recall)
+![Graf odziva](runs_Đekić/detect/train/results.png)
+Razina odziva se kod ovog treniranja blago penjala, no ne u značajnoj količini. U 1. epohi vrijednost odziva bila je oko 37%, dok u 3. oko 38%, što ukazuje na poboljšanje od samo 1% kroz 3 epohe. Iako poboljšanje postoji, valja napomenuti kako ovo nije idealan rezultat, budući da model propušta više od 60% objekata sa slika.
+
+###### Srednja prosječna preciznost (mAP)
+![Graf mAP metrika](runs_Đekić/detect/train/results.png)
+Obe metrike su u konstantnom padu (`mAP50` opada sa `0.24` na `0.22`, dok `mAP50-95` pada sa `0.78` na `0.7`) što je jasan pokazatelj kako model uspjeva detektirati objekte, ali sa vrlo niskom preciznošću. Kao što je navedeno i prije, konstantno opadanje metrike `mAP50-95(B)` dovelo je do aktiviranja mehanizma ranog zaustavljanja i prekidanja treniranja modela.
+
+#### Precision-Confidence Curve
+![PrecisionConfidenceCurve](runs_Đekić/detect/train/P_curve.png)
+Na grafu funkcije koja prikazuje Precision-Confidence odnos moguće je vidjeti kako krivulja preciznosti za sve klase naglo raste na vrijednosti pouzdanosti od 0.8, postižući svoj maksimum koji iznosi 1.00 pri pouzdanosti od 0.959. Krivulja preciznosti za klasu "vehicle" također raste i dostiže vrijednost 1 pri pouzdanosti od oko 0.9. Krivulja preciznosti za klasu "non-vehicle" ostaje niska, što znači da model ima problema pri prepoznavanju objekata koji nisu vozila.
+
+#### Precision-Recall Curve
+![PrecisionRecallCurve](runs_Đekić/detect/train/PR_curve.png)
+Funkcija Precision-Recall kod ovog modela pokazuje relativno niske vrijednosti za sve klase. Vrijednosti ove krivulje postepeno opadaju kako odziv raste, a najviša vrijednost iznosi oko 0.35. Krivulja koja se odnosi na klasu "vehicle" ima nešto bolju početnu vrijednost, oko 0.6, što je zadovoljavajuće, ali postepeno opada sa povećanjem odziva. Vrijednosti krivulje za klasu "non-vehicle" ostaju gotovo 0 cijelo vrijeme. Loše performanse za "all classes" potvrđuje i niska vrijednost mAP@0.5 od 0.24. Vrijednost za klasu "vehicle" iznosi 0.478, što također nije savršeno, dok vrijednost za klasu "non-vehicle" iznosi 0.001.
+
+#### Recall-Confidence Curve
+![RecallConfidenceCurve](runs_Đekić/detect/train/R_curve.png)
+Funkcija za klasu "all vehicle" postepeno opada kako se prag pouzdanosti povećava, što je i očekivano ponašanje. S druge strane, funkcija za klasu "vehicle" pokazuje primjetno veći odziv, a zatim na pragu pouzdanosti od 0.8 naglo opada. Kao i do kod ostalih krivulja do sada, funkcija za klasu "non-vehicle" ostaje na nuli cijelo vrijeme. Najveći odziv u iznosu od 0.44 model postiže pri pragu pouzdanosti od 0.000, što je točka kada model ima najmanju selekciju.
+
+#### F1-Confidence Curve
+![F1Confidence](runs_Đekić/detect/train/F1_curve.png)
+F1 krivulja za sve klase dostiže svoju maksimalnu vrijednost od 0.30 pri pragu pouzdanosti od 0.624, a nakon toga naglo opada prema nuli. S druge strane, krivulja za klasu "vehicle" ponovno postiže bolje rezultate sa maksimalnom vrijednošću od 0.6 pri istom pragu pouzdanosti, čime se potvrđuju bolje performanse modela za tu klasu. Funkcija za kalsu "non-vehicle" ponovno ostaje na nuli
+
+#### Interpretacija matrice konfuzije
+Normalizirana matrica konfuzije za drugi trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+
+**Normalizirana matrica konfuzije:**
+![Normalizirana matrica](runs_Đekić/detect/train/confusion_matrix_normalized.png)
+
+Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
+* **"non-vehicle" klasa:**
+    * Samo 0.00 (0%) stvarnih "non-vehicle" objekata je ispravno klasificirano.
+    * Ogromnih 0.95 (95%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.05 (5%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "vehicle".
+* **"vehicle" klasa:**
+    * Model pokazuje visoku točnost za klasu "vehicle", s 0.92 (98%) točno klasificiranih instanci.
+    * Samo 0.08 (7%) "vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.00 (0%) "vehicle" objekata je pogrešno klasificirano kao "non-vehicle".
+* **"background" klasa:**
+    * Model je vrlo neuspješan u prepoznavanju "background" klase s 0.00 (0%) točnih detekcija.
+    * Samo 0.02 (2%) "background" objekata je pogrešno klasificirano kao "non-vehicle".
+    * 0.98 (98%) "background" objekata je pogrešno klasificirano kao "vehicle".
+
+**Zaključak iz matrica konfizije:**
+Analiza matrica konfuzije u prvom treningu pokazuje probleme u detekciji "non-vehicle" klase, gdje model gotovo sve objekte prepoznaje kao "background". Osim toga, model ima velikih problema u detekciji "background" klase, budući da većinu pozadine prepoznaje kao klasu "vehicle". Performanse za klasu "vehicle" su gotovo odlične, što su potvrdile i dosadašnje krivulje koje su imale vrlo velike vrijednosti preciznost i odaziva. Ovakvi rezultati matrice konfuzija su bili očekivani, budući da su mAP vrijednosti bile vrlo niske za klasu "all vehicles" i nulte za klasu "non-vehicle" u svim prikazanim funkcijama.
+
+#### Ukupna ocjena
+Nakon prvog treniranja modela na 5 epoha dobivamo rezultate koji su dosljedni ranoj fazi učenja. Razina gubitaka koja opada za vrijeme treniranja je dobar znak, međutim velika količina pogrešaka na validacijskom skupu i niske mAP vrijednosti pokazuju kako model nije dovoljno dobro istreniran kako bi mogao raditi predikcije na neviđenim podacima. Parametre modela potrebno je bolje definirati kako bi mogli očekivati i bolje rezultate.
+
+### Drugo treniranje - Yolo11 medium
+
 
 ## Zaključak 
 
