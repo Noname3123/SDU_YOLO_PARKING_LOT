@@ -27,11 +27,17 @@ Treniranje modela je bilo implementirano u paru te su zadaci bili podijeljeni.
 
 ## Pregled područja
 
-#TODO: OPIŠI YOLO I RAČUNALNI VID
+Računalni vid je područje umjetne inteligencije koje omogućava računalima da percipiraju i interpretiraju informacije iz slika ili videozapisa, slično kao i ljudski vid. Jedna od ključnih primjena računalnog vida je detekcija objekata, gdje je cilj prepoznati i locirati objekte unutar slike, što je bio cilj i ovog projekta. U tu svrhu razvijeni su brojni modeli, a jedan od najpoznatijih i najučinkovitijih je YOLO (You Only Look Once). 
+
+YOLO modeli su poznati po svojoj brzini i efikasnosti jer obavljaju detekciju objekata u stvarnom vremenu kroz samo jedan prolaz mreže. YOLOv11 predstavlja jednu od novijih iteracije ove arhitekture, koja dodatno poboljšava preciznost i prilagodljivost kroz napredne tehnike učenja i optimizacije.
+
+Model kombinira detekciju objekata, klasifikaciju i regresiju pozicija unutar jedinstvene neuronske mreže, što ga čini posebno pogodnim za aplikacije u nadzoru, autonomnim vozilima i industrijskoj automatizaciji. Zbog svoje uravnoteženosti između točnosti i brzine, YOLOv11 je popularan izbor za istraživače i praktičare u području računalnog vida. Baš zbog takvog širokog podučja primjene, odlučili smo se pokušati istrenirati ovaj model da prepoznaje vozila na slikama, a za to smo koristili YOLOv11 varijante "medium" i "large".
 
 ## Opis skupa podataka 
 
-#TODO: opiši skup podataka i augmentiranje te baci licence na skup podataka
+#TODO: Opisati skup podataka
+
+Skup podataka proširili smo dodatnim slikama na način da smo postojećim slikama mijenjali određene parametre. U tu svrhu, izrađena je Python skripta koja augmentira postojeće slike. Vrši to na način da uzima svaku sliku iz skupa podataka za treniranje te kreira pet novih slika na temelju svake od njih, izmjenjujući jednu od karakteristika te slike koje su unaprijed definirane, a to su: **svjetlina**, **kontrast**, **šum**, **zamućenje** i **gamma** (vrsta podešavanja tonova srednje vrijednosti piksela bez utjecaja svijetle ili tamne dijelove slike). Novokreirane slike spremljene su u formatu *originalniNaziv_augmentacija*, a uz to su kopirane anotacije i oznake za svaku sliku te spremljene u istom formatu kako bi se mogle proslijediti YOLO modelu na učenje.
 
 ## Opis primijenjenih metoda
 
@@ -677,7 +683,7 @@ Funkcija Precision-Recall kod ovog modela pokazuje relativno niske vrijednosti z
 
 #### Recall-Confidence Curve
 ![RecallConfidenceCurve](runs_Đekić/detect/train2/R_curve.png)
-Funkcija za klasu "all vehicle" postepeno opada kako se prag pouzdanosti povećava, što je i očekivano ponašanje s obzirom na dosadašnje rezultate. S druge strane, funkcija za klasu "vehicle" pokazuje primjetno veći odziv, a zatim na pragu pouzdanosti od 0.8 naglo opada. Kao i kod ostalih krivulja do sada, funkcija za klasu "non-vehicle" ostaje na nuli cijelo vrijeme. Najveći odziv u iznosu od 0.45 model u rasponu praga pouzdanosti od 0.00 do što je točka kada model ima najmanju selekciju. Model zadržava sličan odziv sve do praga pouzdanosti od oko 0.07.
+Funkcija za klasu "all vehicle" postepeno opada kako se prag pouzdanosti povećava, što je i očekivano ponašanje s obzirom na dosadašnje rezultate. S druge strane, funkcija za klasu "vehicle" pokazuje primjetno veći odziv, a zatim na pragu pouzdanosti od 0.8 naglo opada. Kao i kod ostalih krivulja do sada, funkcija za klasu "non-vehicle" ostaje na nuli cijelo vrijeme. Najveći odziv u iznosu od 0.45 model za prag pouzdanosti od 0.00, što je točka kada model ima najmanju selekciju. Model zadržava sličan odziv sve do praga pouzdanosti od oko 0.07.
 
 #### F1-Confidence Curve
 ![F1Confidence](runs_Đekić/detect/train2/F1_curve.png)
@@ -747,18 +753,18 @@ Ovoga puta krivulja za klasu "all classes" nema nikakvih promjena u odnosu na pr
 Odnos preciznosti i odaziva ovoga je puta nešto niži nego u prošloj iteraciji. Funkcija za sve klase dostiže najveću vrijednost preciznosti od 0.0492 za vrijednost odaziva od 0.00, za zatim naglo opada u samom početku na 0.246. Funkcija za klasu "vehicle" i dalje postiže znatno bolje rezultate u odnosu na krivulju za sve klase, ali razlike u odnosu na prošlo treniranje su zanemarive (najveća vrijednost 0.492). Klasifikacija objekata koji nisu vozila je i dalje neuspješna.
 
 #### Recall-Confidence Curve
-![RecallConfidenceCurve](runs_Đekić/detect/train2/R_curve.png)
-Funkcija za klasu "all vehicle" postepeno opada kako se prag pouzdanosti povećava, što je i očekivano ponašanje s obzirom na dosadašnje rezultate. S druge strane, funkcija za klasu "vehicle" pokazuje primjetno veći odziv, a zatim na pragu pouzdanosti od 0.8 naglo opada. Kao i kod ostalih krivulja do sada, funkcija za klasu "non-vehicle" ostaje na nuli cijelo vrijeme. Najveći odziv u iznosu od 0.45 model u rasponu praga pouzdanosti od 0.00 do što je točka kada model ima najmanju selekciju. Model zadržava sličan odziv sve do praga pouzdanosti od oko 0.07.
+![RecallConfidenceCurve](runs_Đekić/detect/train3/R_curve.png)
+I pri ovoj iteraciji treniranja model pokazuje slično ponašanje kao i do sada. Najveći odziv funkcija za sve klase u vrijednosti od 0.45 ima za prag pouzdanosti od 0.00, što je ponašanje koje smo vidjeli i prije. Funkcija za klase "vehicle" ponovno ima znatno veće vrijednosti pa tako dostiže svoj maksimum od oko 0.9 pri istom pragu pouzdanosti. Klasifikacija objekata koji nisu vozila i dalje stvara problem modelu.
 
 #### F1-Confidence Curve
-![F1Confidence](runs_Đekić/detect/train2/F1_curve.png)
-F1 krivulja za sve klase dostiže svoju maksimalnu vrijednost od 0.29 pri pragu pouzdanosti od 0.745, a nakon toga naglo opada prema nuli. S druge strane, krivulja za klasu "vehicle" ponovno postiže bolje rezultate sa maksimalnom vrijednošću od 0.62 pri istom pragu pouzdanosti, čime se potvrđuju bolje performanse modela za tu klasu. Funkcija za kalsu "non-vehicle" ponovno ostaje na nuli.
+![F1Confidence](runs_Đekić/detect/train3/F1_curve.png)
+Gotovo iste rezultate dobivamo i pri analizi ove krivulje. Funckija za sve klase postiže najvišu vrijednost 0.3 pri pragu pouzdanosti od 0.752, što je sada već često ponovljen rezultat. Krivulja za klasu "vehicle" i dalje dominira sa najvećom vrijednošću od oko 0.63 pri istom pragu pouzdanosti. Model i dalje ne klasificira objekte koji nisu vozila. 
 
 #### Interpretacija matrice konfuzije
 Normalizirana matrica konfuzije za drugi trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
 
 **Normalizirana matrica konfuzije:**
-![Normalizirana matrica](runs_Đekić/detect/train2/confusion_matrix_normalized.png)
+![Normalizirana matrica](runs_Đekić/detect/train3/confusion_matrix_normalized.png)
 
 Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
 * **"non-vehicle" klasa:**
@@ -770,16 +776,236 @@ Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu perform
     * Samo 0.07 (7%) "vehicle" objekata je pogrešno klasificirano kao "background".
     * 0.00 (0%) "vehicle" objekata je pogrešno klasificirano kao "non-vehicle".
 * **"background" klasa:**
-    * Model je vrlo uspješam u prepoznavanju "background" klase s 0.98 (98%) točnih detekcija.
+    * Model je vrlo uspješam u prepoznavanju "background" klase s 0.99 (99%) točnih detekcija.
     * Samo 0.02 (2%) "background" objekata je pogrešno klasificirano kao "non-vehicle".
     * 0.00 (0%) "background" objekata je pogrešno klasificirano kao "vehicle".
 
 **Zaključak iz matrica konfizije:**
-Analiza matrica konfuzije u drugom treningu pokazuje kako model nema nikakvog pomaka vezano za predikciju klase "non-vehicle", gdje se većina takvih objekata i dalje klasificira kao "background". Performanse za klase "vehicle" i "background su i dalje izvanredne, što su potvrdile i dosadašnje krivulje koje su imale vrlo velike vrijednosti preciznost i odaziva. Uz sve dosadašnje krivulje i rezultate matrice konfuzije moguće je vidjeti kako model neznatno manje griješi pri klasifikaciji objekata kao "non-vehicle" te ima povećanje od 1% u klasifikaciji objekata kao "vehicle".
+Nakon analize normalizirane matrice konfuzije može se zaključiti kako model nema značajna poboljšanja. Klasifikacija objekata koji nisu vozila i dalje daje problem modelu, što može značiti kako objekata koji nisu vozila nedostaje na slici ili su premaleni da ih model zamjeti. Klasifikacija pozadine je sada gotovo savršena, sa čak 99% točnosti. Nakon dobivanja gotovo istih rezultata pri povećanju broja epoha može se djelomično zaključiti kako parametri modela ne utječu direktno na kvalitetu njegovih predikcija.
 
 #### Ukupna ocjena
-Druga iteracija treniranja sa promjenom rezolucije slike nije rezultirala velikim promjenama, što se moglo i očekivati. Promjene ipak idu u pozitivnom smjeru, što dovodi do zaključka da povećanje epoha i promjena ostalih parametara može poboljšati performanse modela. 
+Nakon treće iteracije treniranja sa većim brojem epoha dobili smo gotovo iste rezultate, što dovodi do zaključka kako promjena i povećanje parametara možda ne utječe direktno na kvalitetu predikcija modela. Iako poboljšanje postoji u nekim aspektima, ono je gotovo zanemarivo.
+
+### Četvrto treniranje - Yolo11 medium
+#### Parametri treniranja
+Četvrta iteracija kombinirala je postavke iz prethodnih pokušaja s ciljem pronalaska optimalne konfiguracije.
+- **`epochs: 10`** i **`patience: 5`**: Vrijednosti broja epoha i mehanizma ranog zaustavljanje ostaju nepromjenjene. Model je prošao kroz svih 10 epoha, što znači da se mehanizam za rano zaustavljanje nije aktivirao, odnosno nismo imali lošiju glavnu metriku 5 epoha za redom.
+- **`batch: 4`**: Veličina serije ostala je nepromijenjena.
+- **`imgsz: 640`**: Rezolucija slika ponovno je povećana na 640x640 piksela, kao kod drugog treniranja, kako bi model lakše opazio sve potrebne detalje
+- **`augment: false`**: Standardne augmentacije su i dalje bile isključene.
+
+#### Interpretacija metrika
+Rezultati iz `results.csv` potvrđuju prethodne nalaze i pokazuju da kombinacija veće rezolucije i dužeg treniranja bez rješavanja temeljnog problema overfittinga ne donosi poboljšanja.
+
+##### Funkcije gubitka (Loss Functions)
+![Grafovi funkcija gubitka](runs_Đekić/detect/train4/results.png)
+- **Gubitak na trening skupu**: Vrijednosti gubitka (`train/box_loss`, `train/cls_loss`) konzistentno opadaju tijekom svih 10 epoha, s `train/box_loss` koji pada sa oko 1.56 na oko 1.20. Ovo još jednom potvrđuje da model uspješno uči na trening podacima.
+- **Gubitak na validacijskom skupu**: I nakon četvrte iteracije postoje ogromne razlike između trening i validacijskih rezultata. Vrijednosti `val/box_loss` (~2.4) i `val/cls_loss` (~4.15) su izrazito visoke i ne pokazuju trend opadanja, što je jasan znak da model ne generalizira dobro.
+
+##### Preciznost (Precision)
+![Graf preciznosti](runs_Đekić/detect/train4/results.png)
+Preciznost (`metrics/precision(B)`) i dalje ukazuje na veliku nestabilnost. U 3. epohi bilježi skok na `0.735`, što se poklapa s najboljim mAP rezultatom, ali kroz ostale epohe ostaje vrlo niska kao i u trećem treniranju. S ovim smo zaključili kako podaci unutar jednog batcha nisu uzrok, već sama nestabilnost modela.
+
+##### Odziv (Recall)
+![Graf odziva](runs_Đekić/detect/train4/results.png)
+Odziv (`metrics/recall(B)`) pokazuje blagi, ali nedovoljan rast, s početnih `0.365` na konačnih `0.42`. Model i dalje propušta pronaći gotovo 60% svih objekata na slikama.
+
+##### Srednja prosječna preciznost (mAP)
+![Graf mAP metrika](runs_Đekić/detect/train4/results.png)
+- **`metrics/mAP50(B)`**: Vrijednost ove metrike gotovo cijelo vrijeme raste, ali u vrlo malim koracima pa tako doseže svoju najvišu vrijednost od `0.26` u 10. epohi
+- **`metrics/mAP50-95(B)`**: Ključna metrika performansi, `mAP50-95(B)`, također postiže svoj maksimum od `0.0875` u 10. epohi. Iako bilježi konstantan rast, ove vrijednosti su vrlo niske, što znači da se model muči sa kvalitetnom klasifikacijom objekata
+
+#### Precision-Confidence Curve
+
+![PrecisionConfidenceCurve](runs_Đekić/detect/train4/P_curve.png)
+Preciznost i u ovom slučaju raste s povećanjem praga pouzdanosti. Pri pragu pouzdanosti od približno 0.78, preciznost za "all classes" naglo raste, dostižući 1.00 pri pouzdanosti od 0.978. Preciznost za klasu "vehicle" također pokazuje porast preciznosti s povećanjem pouzdanosti, dostižući više vrijednosti za svaki prag pouzdanosti. Plava linija, koja predstavlja "non-vehicle" klasu, ostaje na gotovo nuli, što znači da model ima vrlo nisku preciznost za detekcije koje nisu vozila.
+
+#### Precision-Recall Curve
+
+![PrecisionRecallCurve](runs_Đekić/detect/train4/PR_curve.png)
+Ponašanje modela koje se može uočiti na ovom grafu gotovo je isto kao i u prošlim iteracijama treniranja. Vrijednosti funkcije za sve klase varira između 0.3 i 0.2 sve do praga pouzdanosti od 0.9, nakon čega naglo opada. Slično se događa i sa funkcijom za klasu "vehicle", osim što ima dosta veće vrijednosti. mAP@05 vrijedost za sve klase iznosi 0.261 što je vrlo nizak rezultat i upućuje na to kako model ne generalizira podatke kako treba. Kod "vehicle" klase ta je vrijednost 0.521, što je više, ali i dalje umjereno. Preciznost za klasu "non-vehicle" ostaje na 0.000.
+
+#### Recall-Confidence Curve
+
+![RecallConfidenceCurve](runs_Đekić/detect/train4/R_curve.png)
+Vrijednosti odziva također pokazuju slične uzorke kao i u prošlim treniranjima. I dalje postoji velika razlika između rezultata klasifikacije kod svih klasa i klase "vehicle", gdje odziv za klasu "vehicle" drži vrlo visoke vrijednosti sve do praga pouzdanosti od 0.8, nakon čega naglo pada. Maskimalna vrijednost odziva za sve klase bila je 0.45 za prag odziva od 0.000.
+
+#### F1-Confidence Curve
+
+![F1Confidence](runs_Đekić/detect/train4/F1_curve.png)
+Vrijednosti funkcije za sve klase doseže najveću vrijednost od 0.3 za prag pouzdanosti od 0.776. Kao i do sada, vrijednosti funkcije za klasu "vehicle" i dalje su visoko iznad, sa najvećom vrijednosti od oko 0.62 pri istom pragu pouzdanosti, čime su ponovno potvrđene bolje performanse za tu klasu. Vrijednosti za klasu "non-vehicle" ostaju nula.
+
+#### Interpretacija matrica konfuzije
+Normalizirana matrica konfuzije za četvrti trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+
+**Normalizirana matrica konfuzije:**
+![Normalizirana matrica](runs_Đekić/detect/train4/confusion_matrix_normalized.png)
+
+Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
+* **"non-vehicle" klasa:**
+    * Samo 0.00 (0%) stvarnih "non-vehicle" objekata je ispravno klasificirano.
+    * Ogromnih 0.95 (95%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.05 (5%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "vehicle".
+* **"vehicle" klasa:**
+    * Model pokazuje visoku točnost za klasu "vehicle", s 0.94 (95%) točno klasificiranih instanci.
+    * Samo 0.06 (6%) "vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.00 (0%) "vehicle" objekata je pogrešno klasificirano kao "non-vehicle".
+* **"background" klasa:**
+    * Model je izuzetno uspješan u prepoznavanju "background" klase s 0.97 (97%) točnih detekcija.
+    * Samo 0.03 (3%) "background" objekata je pogrešno klasificirano kao "non-vehicle".
+    * 0.00 (0%) "background" objekata je pogrešno klasificirano kao "vehicle".
+
+**Zaključak iz matrica konfuzije:**
+Matrica konfuzije ponovno ukazuje na najveći problem ovog modela, a to je prepoznavanje klase "non-vehicle", gdje i dalje većinu objekata prepoznaje kao pozadinu ili sama vozila. Osim toga, predviđanja samih vozila i pozadine daju vrlo dobre i visoke rezultate. Ova matrica potvrđuje vrlo niske vrijednosti glavnih metrika za predviđanje svih klasa te gotovo nepostojeće vrijednosti metrika za "non-vehicle" klasu. Time se dolazi do zaključka kako model potpuno zanemaruje objekte koji nisu vozila.
+
+#### Ukupna ocjena
+Četvrto treniranje je potvrdilo zaključke iz prethodnih iteracija. Ni veća rezolucija ni duže treniranje ne mogu kompenzirati nedostatak generalizacije uzrokovan, najvjerojatnije, problemima u skupu podataka i nedostatkom augmentacija. Model konzistentno ulazi u stanje teškog overfittinga, gdje metrike dosegnu svoj niski vrhunac vrlo rano (u 3. ili 4. epohi) i nakon toga više ne napreduju. Ovi rezultati snažno upućuju na to da je daljnje podešavanje hiperparametara treniranja bez fundamentalnih promjena u podacima i strategiji augmentacije beskorisno.
+
+### Peto treniranje - Yolo11 medium
+#### Parametri treniranja
+Drugo treniranje ovog modela izvedeno je sa skupom parametara također definiranim u `args.yaml` datoteci, a ključni parametri korišteni pri treniranju su:
+- **`epochs: 20`**: Model je sada treniran kroz 20 epoha,što je dvostruko više od dosadašnjeg broja epoha.
+- **`batch: 4`**: Batch predstavlja broj slika koji je model uzimao pri svakoj iteraciji treniranja, konkretno u ovom primjeru to je 4 slike po iteraciji. Manji veličine serija koriste se kada su resursi, poput GPU-u, ograničeni radi stabilnijeg treniranja, ali potencijalno dovode do nestabilnijih gradijenata tokom učenja.
+- **`imgsz: 416`**: Rezolucija je ponovno postavljena na 416x416, standardnu rezoluciju za YOLO model.
+- **`patience: 10`**: Parametar za rano zaustavljanje postavljen je na 10, što znači da će se model zaustaviti ako nakon 10 uzastopnih epoha pri treniranju ne dobije bolje rezultate. Model je prošao kroz svih 20 epoha, što znači da se mehanizam za rano zaustavljanje nije aktivirao.
+
+#### Interpretacija metrika
+Svi rezultati treniranja zabilježeni su u `results.csv` i pružaju uvid u proces učenja ovog modela kroz 10 epoha.
+
+##### Funkcije gubitka (Loss Functions)
+![Grafovi funkcija gubitka](runs_Đekić/detect/train5/results.png)
+- **Gubitak na trening skupu**: Funkcije `train/box_loss`, `train/cls_loss`, `train/dfl_loss` pokazuju konzistentan pad, što upućuje na to da model učinkovito uči kroz epohe. Primjerice, `box_loss` opada od ~1.7 do ~1.28, dok `cls_loss` pada s nešto iznad 1.0 do ispod 0.7.
+- **Gubitak na validacijskom skupu**: `val/box_loss`, `val/cls_loss`, `val/dfl_loss` osciliraju, posebno `val/cls_loss` koji se penje do gotovo 4.2. To sugerira da model i dalje ima problema sa generalizacijom i jasan je pokazatelj pretreniranja na skupu podataka za treniranje.
+
+##### Preciznost (Precision)
+![Graf preciznosti](runs_Đekić/detect/train5/results.png)
+Nakon pete iteracije i dalje postoji velika oscilacija tijekom epoha (između ~0.23 i ~0.8), što sugerira na osjetljivost modela na strukturu batch-eva. Funkcija ne pokazuje stabilni rast, što može ukazivati na neuravnotežene klase u podacima.
+
+##### Odziv (Recall)
+![Graf odziva](runs_Đekić/detect/train5/results.png)
+Odziv pokazuje stabilan rast u petoj iteraciji (od ~0.36 do ~0.42), ali i dalje nizak, što znači da model i dalje propušta velik broj objekata. Funkcija za klasu "vehicle" i dalje ima primjetno veće vrijednosti u odnosu na sve klase.
+
+###### Srednja prosječna preciznost (mAP)
+![Graf mAP metrika](runs_Đekić/detect/train5/results.png)
+I ovoga puta su mAP metrike u vrlo blagom povećanju. `mAP50(B)` metrika sada dostiže najveću vrijednost od 0.25, dok `mAP50-95(B)` poprima navjeću vrijednost od ~0.082. Ove metrike ne sugeriraju na poboljšanje modela i pokazuju na vrlo ograničenu sposobnost modela za generalizaciju.
+
+#### Precision-Confidence Curve
+![PrecisionConfidenceCurve](runs_Đekić/detect/train5/P_curve.png)
+Za sve klase, model dostiže preciznost od 1.0 pri visokom pragu pouzdanosti (~0.96), što znači da samo predikcije sa visokom sigurnošću daju točne rezultate. "Vehicle" klasa zadržava relativno stabilnu preciznost, ali i dalje ispod 60% većinu vremena. Model ima visoku preciznost pri visokim pragovima, ali to znači da zanemaruje slabije, ali valjane predikcije.
+
+#### Precision-Recall Curve
+![PrecisionRecallCurve](runs_Đekić/detect/train5/PR_curve.png)
+Funkcija za sve klase za mAP@0.5 doseže vrijednost 0.248, dok je za funkciju za klasu "vehicle" ta vrijednost nešto veća, točnije 0.495. Model i dalje ne prepoznaje "non-vehicle" klasu. Ponovno dobivamo potvrdu kako model ima vrlo visoku razinu bias-a, što znači da se fokusira samo na jednu klasu, dok druge ignorira.
+
+#### Recall-Confidence Curve
+![RecallConfidenceCurve](runs_Đekić/detect/train5/R_curve.png)
+Recall za sve klase maksimalno doseže vrijednost od oko 0.44 pri pragu pouzdanosti od 0.0, ali vrlo brzo opada. "Vehicle" recall je vrlo dobar (~0.9), dok je recall za "non-vehicle" praktički nepostojeći. Model identificira samo ono što dobro poznaje, a slab recall za "non-vehicle" navodi na zaključak da su takvi objekti slabo zastupljni u skupu ili nisu dobro označeni.
+
+#### F1-Confidence Curve
+![F1Confidence](runs_Đekić/detect/train5/F1_curve.png)
+Maksimalna F1 vrijednost za sve klase iznosi oko 0.3 pri pragu pouzdanosti od 0.75, što je relativno nisko. F1 vrijednost "vehicle" klase doseže ~0.63, što pokazuje da model puno bolje prepoznaje ovu klasu u odnosu na druge. Niska F1 vrijednost za sve klase navodi na to da model ima slabiju sposobnost balansiranja između preciznosti i odziva, posebno za "non-vehicle" klasu.
+
+#### Interpretacija matrice konfuzije
+Normalizirana matrica konfuzije za drugi trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+
+**Normalizirana matrica konfuzije:**
+![Normalizirana matrica](runs_Đekić/detect/train5/confusion_matrix_normalized.png)
+
+Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
+* **"non-vehicle" klasa:**
+    * Samo 0.00 (0%) stvarnih "non-vehicle" objekata je ispravno klasificirano.
+    * Ogromnih 0.95 (95%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.05 (5%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "vehicle".
+* **"vehicle" klasa:**
+    * Model pokazuje visoku točnost za klasu "vehicle", s 0.93 (93%) točno klasificiranih instanci.
+    * Samo 0.07 (7%) "vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.00 (0%) "vehicle" objekata je pogrešno klasificirano kao "non-vehicle".
+* **"background" klasa:**
+    * Model je vrlo uspješam u prepoznavanju "background" klase s 0.99 (99%) točnih detekcija.
+    * Samo 0.01 (1%) "background" objekata je pogrešno klasificirano kao "non-vehicle".
+    * 0.00 (0%) "background" objekata je pogrešno klasificirano kao "vehicle".
+
+**Zaključak iz matrica konfizije:**
+Iz matrice konfuzije može se izvući zaključak da se model značajno oslanja na dominantne klase ("vehicle" i "background"), dok zanemaruje "non-vehicle" objekte. Vrlo jasno se može zaključiti kako je skup za treniranje neuravnotežen ili nedostaju jasne karakteristike tih objekata.
+
+#### Ukupna ocjena
+Model i dalje pokazuje odlične performanse za klasu "vehicle", ali još uvijek ignorira klasu "non-vehicle". Model također ima vrlo nestabilne validacijske gubitke, što upućuje na potrebu za boljim balansiranjem podataka. Potpuno je jasno kako čista izmjena parametara koji se prosljeđuju modelu neće gotovo uopće promjeniti rezultate učenja.
+
+### Šesto treniranje - Yolo11 medium
+#### Parametri treniranja
+Drugo treniranje ovog modela izvedeno je sa skupom parametara također definiranim u `args.yaml` datoteci, a ključni parametri korišteni pri treniranju su:
+- **`epochs: 20`**: Model je sada treniran kroz 20 epoha,što je dvostruko više od dosadašnjeg broja epoha.
+- **`batch: 4`**: Batch predstavlja broj slika koji je model uzimao pri svakoj iteraciji treniranja, konkretno u ovom primjeru to je 4 slike po iteraciji. Manji veličine serija koriste se kada su resursi, poput GPU-u, ograničeni radi stabilnijeg treniranja, ali potencijalno dovode do nestabilnijih gradijenata tokom učenja.
+- **`imgsz: 640`**: Rezolucija je ponovno postavljena na 640x640, čime bi model trebao imati jasniji pregled detalja na skupu za učenje i validaciju.
+- **`patience: 10`**: Parametar za rano zaustavljanje postavljen je na 10, što znači da će se model zaustaviti ako nakon 10 uzastopnih epoha pri treniranju ne dobije bolje rezultate. Model se zaustavio nakon 13. epohe, što znači da u posljednjih 10 epoha nije pokazao poboljšanje u glavnoj metrici (`mAP50-95(B)`)
+
+#### Interpretacija metrika
+Svi rezultati treniranja zabilježeni su u `results.csv` i pružaju uvid u proces učenja ovog modela kroz 10 epoha.
+
+##### Funkcije gubitka (Loss Functions)
+![Grafovi funkcija gubitka](runs_Đekić/detect/train6/results.png)
+- **Gubitak na trening skupu**: Trening gubici, uključujući `train/box_loss`, `train/cls_loss` i `train/dfl_loss` pokazuju stabilan i konstantan pad kroz sve epohe, što je naznaka da model nastavlja učiti strukturu i klasifikaciju objekata iz podataka. 
+- **Gubitak na validacijskom skupu**: Gubici na validacijskom skupu znatno su viši, `val/cls_loss` i `val/dfl_loss` su posebno izraženi i variraju kroz epohe. Takvo ponašanje sugerira da iako model poboljšava performanse na trening podacima, njegova sposobnost generalizacije na neviđene primjere ostaje ograničena. Ova razlika također ponovno ukazuje na pretreniranje i osjetljivost na distribuciju validacijskog skupa.
+
+##### Preciznost (Precision)
+![Graf preciznosti](runs_Đekić/detect/train6/results.png)
+Preciznost modela (`metrics/precision(B)`) pokazuje veliku nestabilnost kroz epohe, što može biti razlog neuravnoteženosti ulaznih podataka. Preciznost za klasu "vehicle" i dalje dominantna nad svim ostalim klasama. 
+
+##### Odziv (Recall)
+![Graf odziva](runs_Đekić/detect/train6/results.png)
+Vrijednosti odziva stabilno rastu i dostižu maksimum od oko 0.425, što je pozitivan znak da model prepoznaje sve više objekata.
+
+###### Srednja prosječna preciznost (mAP)
+![Graf mAP metrika](runs_Đekić/detect/train6/results.png)
+Srednje prosječne preciznosti (`mAP50` i `mAP50-95`) nastavljaju lagano rasti, s vrijednostima koje na kraju dosežu oko 0.257 i 0.084. Iako su ove vrijednosti niske, konstantan porast mAP metrika ukazuje na postepeno, ali sporo poboljšanje u sveukupnoj točnosti lokalizacije objekata.
+
+#### Precision-Confidence Curve
+![PrecisionConfidenceCurve](runs_Đekić/detect/train6/P_curve.png)
+Krivulja preciznosti u odnosu na prag pouzdanosti pokazuje da model za sve klase postiže 1.00 preciznost pri vrlo visokom prau od 0.982. Klasa "vehicle" ima relativno stabilnu preciznost, ali bez značajnog poboljšanja u nižim regijama pouzdanosti, dok je krivulja "non-vehicle" praktički neaktivna. Takvo ponašanje modela može biti koristno ako je cilj imati vrlo precizne predikcije bez lažno pozitivnih rezultata, no uz cijenu brojnih propuštanja objekata. Model je očito treniran s težinom ka minimiziranju grešaka za dominantnu klasu, odbacujući gotovo sve druge.
+
+#### Precision-Recall Curve
+![PrecisionRecallCurve](runs_Đekić/detect/train6/PR_curve.png)
+Precision-Recall krivulja potvrđuje već uočene probleme. Model uspješno detektira vozila, s mAP@0.5 vrijednošću od 0.514, dok je mAP za "non-vehicle" klasu i dalje 0.000. Za sve klase kombinirano, model doseže mAP@0.5 od 0.257, što predstavlja neznatno poboljšanje u odnosu na prethodne iteracije. Krivulja za sve klase je poprilično ravna i niska, što sugerira da je ukupna preciznost konstantno kompomitirana zbog neravnoteže između klasa. Ova analiza dodatno potvrđuje potrebu za boljim balansiranjem skupa podataka i eventualnim uvođenjem drugih strategija, kao na primjer "class-weight"-inga.
+
+#### Recall-Confidence Curve
+![RecallConfidenceCurve](runs_Đekić/detect/train6/R_curve.png)
+Recall-Confidence krivulja pokazuje da model za sve klase postiže maksimani recall od 0.45 pri najnižem pragu pouzdanosti, ali ta vrijednost brzo opada s povećanjem praga. Klasa "vehicle" ponovno se ističe s gotovo stalnim odzivom od 0.9, dok je odziv za "non-vehicle" zanemariv. Ovakav rezultat jasno ukazuje da model ima visoku osjetljivost za poznatu klasu, ali vrlo lošu za sve ostale. Strategije poput fine-tuninga samo na "non-vehicle" podacima ili generiranje dodatnih primjera iz te kategorije mogle bi pomoći u uravnotežavanju.
+
+#### F1-Confidence Curve
+![F1Confidence](runs_Đekić/detect/train6/F1_curve.png)
+F1-Confidence krivulja pokazuje da model doseže maksimalnu F1 vrijednost od 0.29 za sve klase pri pragu pouzdanosti od 0.766, što ukazuje na slab ukupni balans između preciznosti i odziva. Ipak, klasa "vehicle" zadržava znatno bolje F1 performanse ,dosežući vrijednost od oko 0.6, dok je F1 za klasu "non-vehicle" 0. Krivulja se naglo ruši za više vrijednosti pouzdanosti, što ponovno ukazuje na osjetljivost modela kada je potrebno održati konzistentnu točnost pri visokom pragu. Ovakva slika govori u prilog ideji da model dobro prepoznaje jednu klasi, ali i dalje nije sposoban pravilno klasificirati rijeđe ili kompleksnije kategorije.
+
+#### Interpretacija matrice konfuzije
+Normalizirana matrica konfuzije za drugi trening modela pruži uvid u performanse klasifikacije. Model je klasificirao objekte u tri kategorije: "non-vehicle", "vehicle" i "background".
+
+**Normalizirana matrica konfuzije:**
+![Normalizirana matrica](runs_Đekić/detect/train6/confusion_matrix_normalized.png)
+
+Normalizirana matrica prikazuje udjele, što omogućuje lakšu usporedbu performansi među klasama.
+* **"non-vehicle" klasa:**
+    * Samo 0.00 (0%) stvarnih "non-vehicle" objekata je ispravno klasificirano.
+    * Ogromnih 0.95 (95%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.05 (5%) stvarnih "non-vehicle" objekata je pogrešno klasificirano kao "vehicle".
+* **"vehicle" klasa:**
+    * Model pokazuje visoku točnost za klasu "vehicle", s 0.93 (93%) točno klasificiranih instanci.
+    * Samo 0.07 (7%) "vehicle" objekata je pogrešno klasificirano kao "background".
+    * 0.00 (0%) "vehicle" objekata je pogrešno klasificirano kao "non-vehicle".
+* **"background" klasa:**
+    * Model je vrlo uspješam u prepoznavanju "background" klase s 0.97 (97%) točnih detekcija.
+    * Samo 0.03 (3%) "background" objekata je pogrešno klasificirano kao "non-vehicle".
+    * 0.00 (0%) "background" objekata je pogrešno klasificirano kao "vehicle".
+
+**Zaključak iz matrica konfizije:**
+Model u finalnoj iteraciji treniranja i dalje ima probleme s klasom "non-vehicle" gdje je gotovo svaki objekt iz te klase krivo klasificiran kao "background". Klasa "vehicle" je i dalje dominantno prepoznata, sa vrlo visokom točnošću. Klasa "background" je ponovno najpreciznija sa gotovo svim ispravnim detekcijama. Ovakva distribucija ukazuje na snažnu pristranost modela prema dominantnim klasama ("vehicle") te sugerira da su "non-vehicle" objekti vjerojatno nedovoljno zastupljeni ili slabo obilježeni.
+
+#### Ukupna ocjena
+Model pokazuje stabilan napredak u detekciji i klasifikaciji objekata klase "vehicle", ali njegova ukupna učinkovitost ostaje ograničena zbog izrazito lošeg prepoznavanja klase "non-vehicle". Iako su metrika poput mAP@0.5 i recall-a za "vehicle" blago poboljšane, ukupni F1 i mAP rezultati su niski i ukazuju na neuravnoteženo ponašanje modela. Trening gubici opadaju konzistentno, no validacijski ostaju visoki, što sugerira mogući overfitting. Zaključno, model je funkcionalan za prepoznavanje vozila, ali zahtijeva dodatne optimizacije i balansiranje podataka za širu primjenjivost.
 
 ## Zaključak 
+Kroz provedeni niz eksperimenata s treniranjem YOLOv11 modela, jasno se uočavaju ograničenja trenutnog pristupa, prvenstveno vezana uz nemogućnost modela da generalizira izvan naučenog skupa podataka. Unatoč različitim varijacijama u parametrima, poput broja epoha, veličine ulazne slike, i aktivacije ranog zaustavljanja, model konstantno pokazuje izražene znakove overfittinga. To se očituje u niskim mAP50-95 vrijednostima koje ne prelaze 0.08 te u vrlo lošim rezultatima za klasu "non-vehicle", koja je gotovo u potpunosti zanemarena u svim pokušajima. Suprotno tome, klasa "vehicle" pokazuje solidne performanse, a "background" gotovo savršene, što ukazuje na pristranost modela prema češćim i vizualno dominantnijim klasama u skupu podataka.
+
+Eksperimenti su potvrdili da ni povećanje broja epoha, ni veća rezolucija slike, ni primjena warmup mehanizama ne mogu nadomjestiti temeljne nedostatke u strukturi i raznolikosti podataka. Također, isključivanje augmentacija dodatno je smanjilo sposobnost modela da nauči varijabilnost iz okoline. Svi rezultati dosljedno ukazuju da su problematični upravo podaci, nedostatna zastupljenost i raznolikost "non-vehicle" objekata te potencijalno loša kvaliteta anotacija. Za budući napredak bit će nužno obogatiti i uravnotežiti skup podataka, uključiti agresivnije augmentacijske tehnike te razmotriti alternativne arhitekture ili transfer learning pristupe koji su otporniji na male i neuravnotežene skupove.
+
+Općenito, projekt je pokazao vrijednu metodološku strukturu, temeljito testiranje i dobru organizaciju evaluacije, no krajnji rezultati jasno upućuju na to da se daljnji rad treba usmjeriti na kvalitetu ulaza u sustav, a manje na fine-tuning parametara modela.
 
 ## Literatura
