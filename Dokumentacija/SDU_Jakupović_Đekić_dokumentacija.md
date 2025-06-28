@@ -170,7 +170,8 @@
       - [7.12.7. Interpretacija matrice konfuzije](#7127-interpretacija-matrice-konfuzije)
       - [7.12.8. Ukupna ocjena](#7128-ukupna-ocjena)
   - [8. Zaključak](#8-zaključak)
-  - [9. Prilozi](#9-prilozi)
+  - [9. Literatura](#9-literatura)
+  - [10. Prilozi](#10-prilozi)
 
 
 <div style="page-break-after: always;"></div>
