@@ -7,7 +7,12 @@ Jedna od funkcionalnosti ParkMan-a uključuje "brojanje" zauzetih mjesta na park
 
 Inicijalni model je treniran sa 20 epoha nad PKLOT skupom podataka. Trenirani model je prikazivao visoke performanse detekcije, koje su vidljive na grafovima ispod.
 
-#TODO: UBACI SLIKE REZULTATA S APVO-a.
+![Gubici, preciznost, odziv, mAP](APVO_slike\3.jpg)
+![Precision-Confidence](APVO_slike\9.jpg)
+![Precision-recall](APVO_slike\8.jpg)
+![Recall-Confidence](APVO_slike\2.jpg)
+![F1-Confidence](APVO_slike\1.jpg)
+![Normalizirana matrica konfuzija](APVO_slike\4.jpg)
 
 Kao što se vidi na grafovima iznad, model je pretreniran te postiže savršene rezultate za parkinge iz PKLOT skupa. Budući da PKLOT sadržava iste parkinge sa različitim korištenostima u trening, validacijskom i test setu, model nije u mogućnosti generalizirati i prepoznati mjesta na novim parkinzima. Razlog proizlazi iz toga što je model učio detektirati parkirna mjesta te ih klasificirati u odgovarajuće kategorije (slobodno i zauzeto). Budući da različiti parkinzi imaju različit raspored mjesta, treniranje generaliziranog modela je zahtjevan proces koji uključuje doradu skupa podataka sa neviđenim parkinzima.
 
@@ -40,8 +45,31 @@ Model kombinira detekciju objekata, klasifikaciju i regresiju pozicija unutar je
 Skup podataka proširili smo dodatnim slikama na način da smo postojećim slikama mijenjali određene parametre. U tu svrhu, izrađena je Python skripta koja augmentira postojeće slike. Vrši to na način da uzima svaku sliku iz skupa podataka za treniranje te kreira pet novih slika na temelju svake od njih, izmjenjujući jednu od karakteristika te slike koje su unaprijed definirane, a to su: **svjetlina**, **kontrast**, **šum**, **zamućenje** i **gamma** (vrsta podešavanja tonova srednje vrijednosti piksela bez utjecaja svijetle ili tamne dijelove slike). Novokreirane slike spremljene su u formatu *originalniNaziv_augmentacija*, a uz to su kopirane anotacije i oznake za svaku sliku te spremljene u istom formatu kako bi se mogle proslijediti YOLO modelu na učenje.
 
 ## Opis primijenjenih metoda
+Za potrebe detekcije vozila sa slika korišteni su YOLOv11 modeli (*medium* i *large*), trenirani kroz više iteracija uz različite kombinacije hiperparametara i konfiguracija podataka. Treniranje je provedeno nad prilagođenim skupom podataka koji uključuje slike parkirališta s klasama `"vehicle"` i `"non-vehicle"`.
+
+### Parametri treniranja
+TIjekom eksperimentiranja korištene su sljedeće ključne postavke:
+- **Broj epoha (`epochs`)**: Modeli su trenirani kroz 5, 10 i 20 epoha, ovisno o eksperimentu. U nekim pokušajima aktiviran je i mehanizam ranog zaustavljanja (`early stopping`) s parametrima poput `patience: 2` ili `patience: 10`.
+- **Batch size (`batch`)**: Veličina batch-a je konstantno postavljena na 4, radi ograničenih GPU resursa.
+- **Veličina ulazne slike (`imgsz`)**: Korištene su rezolucije `416x416` i `640x640`, pri čemu je veća rezolucija testirana radi poboljšanja detekcija manjih objekata.
+- **Augmentacija (`augment`)**: Standardne augmentacije su u eksperimentima bile isključene, budući da smo se oslonili na prethodno napravljene augmentacije s naše strane pomoću već spomenute Python skripte. Iako su augmentacije bile isključene, u svim treniranjima korištena je **mosaic augmentacija**
+- **Warmup (`warmup_echos`)**: U zadnjim iteracijama dodano je zagrijavanje modela kroz prve 3 epohe, budući da je imao dovoljno epoha nakon toga za treniranje.
 
 ## Opis eksperimenta
+Eksperiment je osmišljen s ciljem istraživanja učinkovitosti različitih konfiguracija treniranja YOLOv11 modela za zadatak detekcije vozila na slikama. Polazni model treniran je isključivo nad PKLOT skupom podataka, no pokazao je visok stupanj prekomjernog prilagođavanja i lošu generalizaciju na nove parkinge.
+
+Kako vismo nadvladali ograničenja početnog pristupa, promjenili smo metodologiju klasifikacije: umjesto izravne klasifikacije slobodnih i zauzetih parkirnih mjesta, model je treniran za detekciju vozila i drugih objekata, neovisno o rasporedu parkinga. Time se omogućava generalizacija na nepoznate scene, uz zadržavanje funkcionalnosti za kasniju interpretaciju zauzetosti.
+
+Eksperiment je organiziran u više faza treniranja modela, gdje je svaka faza imala svoje specifične ciljeve, hiperparametre i kombinaciju ulaznih podatkaka:
+- Istražene su dvije varijante modela: **YOLOv11 medium** i **YOLOv11 large**.
+Korišteni su različiti brojevi epoha (od 5 do 20), veličine serija (`batch = 4`), i veličine ulaznih slika (`imgsz = 416` i `640`).
+- Ispitivano je ponašanje modela s i bez standardnih augmentacija, dok je `mosaic augmentacija` bila uključena u svim pokušajima.
+- Uveden je mehanizam ranog zaustavljanja (early stopping) temeljen na stagnaciji metrika (`patience` od 2 do 10 epoha).
+- Neke iteracije uključivale su i **warmup fazu**, u kojoj se learning rate postupno povećavao u prvim epohama.
+
+Tijekom svih eksperimenata koristio se unaprijed pripremljeni i augmentirani skup podataka, koji uključuje dvije klase: `vehicle` i `non-vehicle`. Svaki pokušaj treniranja bio je praćen analizom metrika (gubitak, preciznost, odziv, mAP), vizualizacijom rezultata i interpretacijom matrica konfuzije, što je omogućilo evaluaciju sposobnosti modela da generalizira i prepoznaje različite klase.
+
+U nastavku dokumenta detaljno su opisani pojedinačni pokušaji treniranja, uključujući korištene parametre, rezultate i interpretaciju za svaku iteraciju treniranja.
 
 ## Validacija i objašnjenje rezultata
 ### Prvo treniranje - Yolo11 large
