@@ -268,7 +268,7 @@ Kako vismo nadvladali ograničenja početnog pristupa, promjenili smo metodologi
 Eksperiment je organiziran u više faza treniranja modela, gdje je svaka faza imala svoje specifične ciljeve, hiperparametre i kombinaciju ulaznih podatkaka:
 - Istražene su dvije varijante modela: **YOLOv11 medium** i **YOLOv11 large**.
 Korišteni su različiti brojevi epoha (od 5 do 20), veličine serija (`batch = 4`), i veličine ulaznih slika (`imgsz = 416` i `640`).
-- Ispitivano je ponašanje modela s i bez standardnih augmentacija, dok je `mosaic augmentacija` bila uključena u svim pokušajima.
+- Ispitivano je ponašanje modela bez aktiviranih YOLO augmentacija, dok je `mosaic augmentacija` bila uključena u svim pokušajima.
 - Uveden je mehanizam ranog zaustavljanja (early stopping) temeljen na stagnaciji metrika (`patience` od 2 do 10 epoha).
 - Neke iteracije uključivale su i **warmup fazu**, u kojoj se learning rate postupno povećavao u prvim epohama.
 
