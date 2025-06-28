@@ -1,5 +1,7 @@
 # Detekcija slobodnih i zauzetih mjesta na parkingu pomoću YOLO modela
 
+[Poveznica na GitHub repozitorij sa projektom](https://github.com/Noname3123/SDU_YOLO_PARKING_LOT)
+
 ## Tablica sadržaja
 - [Detekcija slobodnih i zauzetih mjesta na parkingu pomoću YOLO modela](#detekcija-slobodnih-i-zauzetih-mjesta-na-parkingu-pomoću-yolo-modela)
   - [Tablica sadržaja](#tablica-sadržaja)
