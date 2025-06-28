@@ -226,9 +226,24 @@ Model kombinira detekciju objekata, klasifikaciju i regresiju pozicija unutar je
 
 ## 4. Opis skupa podataka 
 
-#TODO: Opisati skup podataka
+Prva iteracija YOLO modela, koja je trenirana za kolegij "Analitika podataka velikog obujma" je trenirana nad PKLOT skupom podataka. PKLOT skup podataka je licenciran sa CC BY 4.0 licencom te sadrži 12,416 anotiranih slika parkirnih mjesta, preuzetih sa nadzornih kamera parkinga. Skup podataka sadrži različite raspone vremenskih uvjeta i zauzetosti parkinga te je namjenjen za detekciju i klasifikaciju parkirnih mjesta kao slobodnih i zauzetih [1]. Skup podataka već ima unaprijed pripremljenu podjelu koja se sastoji od 8,691 slika za treniranje, 2,483 slika za validaciju te 1,242 slika za testiranje.
 
-Skup podataka proširili smo dodatnim slikama na način da smo postojećim slikama mijenjali određene parametre. U tu svrhu, izrađena je Python skripta koja augmentira postojeće slike. Vrši to na način da uzima svaku sliku iz skupa podataka za treniranje te kreira pet novih slika na temelju svake od njih, izmjenjujući jednu od karakteristika te slike koje su unaprijed definirane, a to su: **svjetlina**, **kontrast**, **šum**, **zamućenje** i **gamma** (vrsta podešavanja tonova srednje vrijednosti piksela bez utjecaja svijetle ili tamne dijelove slike). Novokreirane slike spremljene su u formatu *originalniNaziv_augmentacija*, a uz to su kopirane anotacije i oznake za svaku sliku te spremljene u istom formatu kako bi se mogle proslijediti YOLO modelu na učenje.
+Kako bi se generalizirao model, tražio se novi skup podataka koji je optimiziran za detekciju objekata na slikama. Skup podataka koji je najviše odgovarao zahtjevima zadatka je VisDrone(2019). VisDrone je skup podataka koji sadrži slike koje su slikali različite vrste dronova, u različitim vremenskim uvjetima. Skup podataka sadrži 10,209 statičnih slika dronova koji pokrivaju razna područja [2]:
+  1. lokaciju (14 različitih gradova u Kini)
+  2. okoliš (urbani i izvan grada)
+  3. objekte (ljudi, vozila, bicikli...)
+  4. gustoću (rijetke scene i scene s velikom gustoćom objekata).
+  
+Prije treniranja modela, VisDrone skup podataka se trebao prilagoditi potrebama zadatka.
+
+Uzeo se train podskup VisDrone skupa podataka, koji se sastoji od 6,471 slika te se uskladio sa potrebama zadatka. Svi objekti u skupu podataka koji su bili vozila (automobili, busevi, kamioni, motorcikli) su se ponovno anotirali kao nadklasa "vozilo" (engl. *vehicle*), a svi ostali objekti su anotirani kako "ne-vozila" (engl. *non-vehicle*).
+
+Zatim se iz PKLOT skupa uzeo testni i validacijski podskup. Za PKLOT podskup je također bilo potrebno uskladiti klase - *space-occupied* klasa je postala *vehicle*, a *space-free* je postala *non-vehicle*.
+
+Skup podataka se proširio dodatnim slikama na način da su se postojećim slikama (iz train skupa) mijenjali određene parametri. U tu svrhu, izrađena je Python skripta koja augmentira postojeće slike. Vrši to na način da uzima svaku sliku iz skupa podataka za treniranje te kreira pet novih slika na temelju svake od njih, izmjenjujući jednu od karakteristika te slike koje su unaprijed definirane, a to su: **svjetlina**, **kontrast**, **šum**, **zamućenje** i **gamma** (vrsta podešavanja tonova srednje vrijednosti piksela bez utjecaja svijetle ili tamne dijelove slike). Novokreirane slike spremljene su u formatu *originalniNaziv_augmentacija*, a uz to su kopirane anotacije i oznake za svaku sliku te spremljene u istom formatu kako bi se mogle proslijediti YOLO modelu na učenje.
+
+Konačan skup podataka je bio podijeljen na train, test i validacijski skup.
+Train skup je prilagođeni VisDrone2019 te se sastoji od 19,413 slika (originalnih i augmentiranih). Test skup se sastoji od 1,242 originalnih PKLOT slika, dok se validacijski skup sastoji od 2,483 originalnih PKLOT slika.
 
 <div style="page-break-after: always;"></div>
 
@@ -1232,7 +1247,15 @@ Općenito, projekt je pokazao vrijednu metodološku strukturu, temeljito testira
 
 <div style="page-break-after: always;"></div>
 
-## 9. Prilozi
+## 9. Literatura
+
+[1] Almeida, P., Oliveira, L. S., Silva Jr, E., Britto Jr, A., Koerich, A., PKLot – A robust dataset for parking lot classification, Expert Systems with Applications, 42(11):4937-4949, 2015.
+
+[2] Zhu, P., et al. "Detection and tracking meet drones challenge," in IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 44, no. 11, pp. 7380–7399, 2021.
+
+<div style="page-break-after: always;"></div>
+
+## 10. Prilozi
 [PKLOT skup podataka (Roboflow)](https://public.roboflow.com/object-detection/pklot)
 
 [VisDrone skup podataka (GitHub)](https://github.com/VisDrone/VisDrone-Dataset)
