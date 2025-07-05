@@ -69,9 +69,9 @@ def filterClassAnnotations(dir, vehicle_classes):
         with open(f, encoding="utf-8") as file:
             for row in [x.split(" ") for x in file.read().strip().splitlines()]:
                 if int(row[0]) in vehicle_classes:
-                    row[0] = "1"
+                    row[0]="0"
                 else:
-                    row[0] = "0"
+                    continue
                 
                 lines.append(f'{" ".join(row)}\n')
         with open(f, "w", encoding="utf-8") as fl:
@@ -92,3 +92,9 @@ for d in ["train"]:# add other directories here (ex. train, test, valid)
 # Adjust class vals
 for d in ["train"]:# add other directories here (ex. train, test, valid) 
     filterClassAnnotations(dir / d , [3,4,5,8,9])  # convert VisDrone annotations to YOLO labels
+
+for d in ["test"]:# add other directories here (ex. train, test, valid) 
+    filterClassAnnotations(dir / d , [1])  # convert VisDrone annotations to YOLO labels
+
+for d in ["valid"]:# add other directories here (ex. train, test, valid) 
+    filterClassAnnotations(dir / d , [1])  # convert VisDrone annotations to YOLO labels

@@ -14,8 +14,7 @@ test: ./test/images # test images (optional)  1610 images
 
 # Classes
 names:
-  0: non-vehicle
-  1: vehicle 
+  0: vehicle
 
 
 
